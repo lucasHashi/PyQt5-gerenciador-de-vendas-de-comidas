@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>682</width>
-    <height>473</height>
+    <height>457</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -292,67 +292,72 @@
     <property name="title">
      <string>Ingredientes</string>
     </property>
-    <addaction name="actionAdicionar"/>
-    <addaction name="actionGerenciar"/>
+    <addaction name="action_ingredientes_adicionar"/>
+    <addaction name="action_ingredientes_gerenciar"/>
    </widget>
    <widget class="QMenu" name="menuReceitas">
     <property name="title">
      <string>Receitas</string>
     </property>
-    <addaction name="separator"/>
-    <addaction name="actionAdicionar_2"/>
-    <addaction name="actionGerenciar_2"/>
+    <addaction name="action_receitas_adicionar"/>
+    <addaction name="action_receitas_gerenciar"/>
    </widget>
-   <widget class="QMenu" name="menuFabrica_es">
+   <widget class="QMenu" name="menuFabricacoes">
     <property name="title">
      <string>Fabricações</string>
     </property>
-    <addaction name="actionAdicionar_3"/>
-    <addaction name="actionGerenciar_3"/>
+    <addaction name="action_fabricacoes_adicionar"/>
+    <addaction name="action_fabricacoes_gerenciar"/>
    </widget>
    <widget class="QMenu" name="menuVendas">
     <property name="title">
      <string>Vendas</string>
     </property>
-    <addaction name="actionAdicionar_4"/>
+    <addaction name="action_vendas_adicionar"/>
+    <addaction name="action_vendas_gerenciar"/>
    </widget>
    <addaction name="menuIngredientes"/>
    <addaction name="menuReceitas"/>
-   <addaction name="menuFabrica_es"/>
+   <addaction name="menuFabricacoes"/>
    <addaction name="menuVendas"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionAdicionar">
+  <action name="action_ingredientes_adicionar">
    <property name="text">
     <string>Adicionar</string>
    </property>
   </action>
-  <action name="actionGerenciar">
+  <action name="action_ingredientes_gerenciar">
    <property name="text">
     <string>Gerenciar</string>
    </property>
   </action>
-  <action name="actionAdicionar_2">
+  <action name="action_receitas_adicionar">
    <property name="text">
     <string>Adicionar</string>
    </property>
   </action>
-  <action name="actionAdicionar_3">
+  <action name="action_fabricacoes_adicionar">
    <property name="text">
     <string>Adicionar</string>
    </property>
   </action>
-  <action name="actionAdicionar_4">
+  <action name="action_vendas_adicionar">
    <property name="text">
     <string>Adicionar</string>
    </property>
   </action>
-  <action name="actionGerenciar_2">
+  <action name="action_receitas_gerenciar">
    <property name="text">
     <string>Gerenciar</string>
    </property>
   </action>
-  <action name="actionGerenciar_3">
+  <action name="action_fabricacoes_gerenciar">
+   <property name="text">
+    <string>Gerenciar</string>
+   </property>
+  </action>
+  <action name="action_vendas_gerenciar">
    <property name="text">
     <string>Gerenciar</string>
    </property>
