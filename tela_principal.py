@@ -6,6 +6,9 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+
+    switch_tela_cadastro_ingrediente = QtCore.pyqtSignal()
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -38,7 +41,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.action_vendas_gerenciar.triggered.connect(lambda: self.abrir_tela_gerenciar('vendas'))
 
     def abrir_tela_adicionar(self, nomeTela):
-        print('TROCAR PARA TELA ADICIONAR',str(nomeTela))
+        if(nomeTela == 'ingredientes'):
+            self.switch_tela_cadastro_ingrediente.emit()
+        else:
+            print('TROCAR PARA TELA ADICIONAR',str(nomeTela))
     
     def abrir_tela_gerenciar(self, nomeTela):
         print('TROCAR PARA TELA GERENCIAR',str(nomeTela))
@@ -96,10 +102,3 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.model.dataChanged.emit(index, index)
             # Clear the selection (as it is no longer valid).
             self.todoView.clearSelection()
-
-
-
-app = QtWidgets.QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec_()
