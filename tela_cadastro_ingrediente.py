@@ -32,7 +32,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def cadastrar(self):
         nomeIngred = self.txt_nome.text()
         unidade = self.txt_unidade.text()
-        tamanho = float(self.txt_tam_embalagem.text())
+        tamanho = float(str(self.txt_tam_embalagem.text()).replace(',','.'))
         nomeMarca = self.txt_marca.text()
 
         if(nomeMarca.replace(' ','')):
@@ -68,3 +68,4 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.txt_tam_embalagem.clear()
         self.txt_unidade.clear()
         self.txt_marca.clear()
+        self.txt_marca.setEnabled(False)

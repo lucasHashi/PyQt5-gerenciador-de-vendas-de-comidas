@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>461</width>
-    <height>531</height>
+    <width>434</width>
+    <height>488</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,21 +66,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="txt_nome">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>2</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lbl_unidade">
         <property name="sizePolicy">
@@ -99,6 +84,9 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>txt_unidade</cstring>
         </property>
        </widget>
       </item>
@@ -135,6 +123,9 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>txt_tam_embalagem</cstring>
         </property>
        </widget>
       </item>
@@ -213,6 +204,28 @@
            </font>
           </property>
          </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLineEdit" name="txt_nome">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="combo_nome"/>
         </item>
        </layout>
       </item>
@@ -312,6 +325,19 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>txt_nome</tabstop>
+  <tabstop>combo_nome</tabstop>
+  <tabstop>txt_unidade</tabstop>
+  <tabstop>txt_marca</tabstop>
+  <tabstop>txt_tam_embalagem</tabstop>
+  <tabstop>btn_cad_limpar</tabstop>
+  <tabstop>btn_cad_sair</tabstop>
+  <tabstop>combo_marca</tabstop>
+  <tabstop>btn_limpar</tabstop>
+  <tabstop>btn_voltar</tabstop>
+  <tabstop>btn_ativa_marca</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
