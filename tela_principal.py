@@ -8,6 +8,7 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     switch_tela_cadastro_ingrediente = QtCore.pyqtSignal()
+    switch_tela_cadastro_receita = QtCore.pyqtSignal()
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -43,6 +44,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def abrir_tela_adicionar(self, nomeTela):
         if(nomeTela == 'ingredientes'):
             self.switch_tela_cadastro_ingrediente.emit()
+        elif(nomeTela == 'receitas'):
+            self.switch_tela_cadastro_receita.emit()
         else:
             print('TROCAR PARA TELA ADICIONAR',str(nomeTela))
     

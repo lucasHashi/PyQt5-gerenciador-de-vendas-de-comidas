@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtWidgets, uic
 
 import tela_principal
 import tela_cadastro_ingrediente
+import tela_cadastro_receita
 
 class Controller:
 
@@ -12,11 +13,16 @@ class Controller:
     def abre_tela_principal(self):
         self.janela_tela_principal = tela_principal.MainWindow()
         self.janela_tela_principal.switch_tela_cadastro_ingrediente.connect(self.abre_tela_cadastro_ingrediente)
+        self.janela_tela_principal.switch_tela_cadastro_receita.connect(self.abre_tela_cadastro_receita)
         self.janela_tela_principal.show()
 
     def abre_tela_cadastro_ingrediente(self):
         self.janela_tela_cadastro_ingrediente = tela_cadastro_ingrediente.MainWindow()
         self.janela_tela_cadastro_ingrediente.show()
+    
+    def abre_tela_cadastro_receita(self):
+        self.janela_tela_cadastro_receita = tela_cadastro_receita.MainWindow()
+        self.janela_tela_cadastro_receita.show()
 
 
 def main():

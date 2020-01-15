@@ -20,6 +20,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_ativa_marca.pressed.connect(self.ativa_marca_nova)
 
         self.carrega_combo_marcas()
+        self.carrega_combo_ingredientes()
+
+        self.combo_nomes.currentIndexChanged.connect(self.combo_ingrediente_to_nome)
     
     def cadastrar_voltar(self):
         self.cadastrar()
@@ -46,10 +49,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         database_receita.insere_ingrediente(nomeIngred, unidade, tamanho, id_marca)
 
+    def combo_ingrediente_to_nome(self):
+        self.txt_nome.setText(str(self.combo_nomes.currentText()).split(' - ')[0])
+        self.txt_tam_embalagem.setText(str(self.combo_nomes.currentText()).split(' - ')[1])
+        self.txt_unidade.setText(str(self.combo_nomes.currentText()).split(' - ')[2])
+
     def carrega_combo_marcas(self):
         self.combo_marca.clear()
         marcas = database_receita.select_marcas_nomes()
         self.combo_marca.addItems(marcas)
+    
+    def carrega_combo_ingredientes(self):
+        self.combo_nomes.clear()
+        nomes_ingredientes = database_receita.select_ingredientes_nomes()
+        self.combo_nomes.addItems(nomes_ingredientes)
 
     def ativa_marca_nova(self):
         if(self.txt_marca.isEnabled()):

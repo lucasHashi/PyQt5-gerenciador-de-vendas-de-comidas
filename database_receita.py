@@ -68,4 +68,19 @@ def select_marca_por_nome(nomeMarca):
 
         return id_marca
 
+def select_ingredientes_nomes():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT DISTINCT nome, tam_embalagem, unidade FROM ingredientes')
+        
+        lista_ingredientes = cursor.fetchall()
+        lista_ingredientes_str = []
+        
+        for linha in lista_ingredientes:
+            ingrediente = '{} - {} - {}'.format(linha[0], linha[1],linha[2])
+            lista_ingredientes_str.append(ingrediente)
+
+        return lista_ingredientes_str
+
 #print(select_marcas_nomes())
