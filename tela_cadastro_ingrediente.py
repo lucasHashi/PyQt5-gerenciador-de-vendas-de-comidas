@@ -25,34 +25,74 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.combo_nomes.currentIndexChanged.connect(self.combo_ingrediente_to_nome)
     
     def cadastrar_voltar(self):
-        self.cadastrar()
-        self.fechar_tela()
+        nome_ingred = self.txt_nome.text()
+        unidade = self.txt_unidade.text()
+        tamanho = self.txt_tam_embalagem.text()
+        nome_marca = self.txt_marca.text()
+        if(self.valida_campos_entradas(nome_ingred, tamanho, unidade, nome_marca)):
+            self.cadastrar()
+            self.fechar_tela()
 
     def cadastrar_limpar(self):
-        self.cadastrar()
-        self.limpar()
+        nome_ingred = self.txt_nome.text()
+        unidade = self.txt_unidade.text()
+        tamanho = self.txt_tam_embalagem.text()
+
+        if(self.txt_marca.text()):
+            nome_marca = self.txt_marca.text()
+        else:
+            nome_marca = str(self.combo_marca.currentText())
+
+        if(self.valida_campos_entradas(nome_ingred, tamanho, unidade, nome_marca)):
+            self.cadastrar()
+            self.limpar()
+
+    def valida_campos_entradas(self, nome, tamanho, unidade, nome_marca):
+        nome = True if(nome.replace(' ','')) else False
+        unidade = True if(unidade.replace(' ','')) else False
+        nome_marca = True if(nome_marca.replace(' ','')) else False
+        try:
+            tamanho = float(str(self.txt_tam_embalagem.text()).replace(',','.'))
+        except:
+            tamanho = False
+        tamanho = True if(tamanho) else False
+
+        return nome*tamanho*unidade*nome_marca
 
     def cadastrar(self):
-        nomeIngred = self.txt_nome.text()
+        nome_ingred = self.txt_nome.text()
         unidade = self.txt_unidade.text()
+        nome_marca = self.txt_marca.text()
         tamanho = float(str(self.txt_tam_embalagem.text()).replace(',','.'))
-        nomeMarca = self.txt_marca.text()
+        id_marca = 0
 
-        if(nomeMarca.replace(' ','')):
-            #ADICIONA ESSA NOVA MARCA
-            database_receita.insere_marca(nomeMarca)
-            #SELECIONA O id_marca DA MARCA COM nome = 'nomeMarca'
-            id_marca = int(database_receita.select_marca_por_nome(nomeMarca))
+        if(nome_marca.replace(' ','')):
+            if(not database_receita.varifica_marca_duplicada(nome_marca)):
+                #ADICIONA ESSA NOVA MARCA
+                database_receita.insere_marca(nome_marca)
+                #SELECIONA O id_marca DA MARCA COM nome = 'nome_marca'
+            id_marca = int(database_receita.select_marca_por_nome(nome_marca))
             self.carrega_combo_marcas()
+            self.carrega_combo_ingredientes()
+            self.txt_marca.setEnabled(False)
+            self.btn_ativa_marca.setText('+')
+            self.txt_marca.clear()
         else:
             id_marca = int(str(self.combo_marca.currentText()).split(' - ')[0])
 
-        database_receita.insere_ingrediente(nomeIngred, unidade, tamanho, id_marca)
+        if(not database_receita.varifica_ingrediente_duplicado(nome_ingred, unidade,tamanho,id_marca)):
+            database_receita.insere_ingrediente(nome_ingred, unidade, tamanho, id_marca)
 
-    def combo_ingrediente_to_nome(self):
-        self.txt_nome.setText(str(self.combo_nomes.currentText()).split(' - ')[0])
-        self.txt_tam_embalagem.setText(str(self.combo_nomes.currentText()).split(' - ')[1])
-        self.txt_unidade.setText(str(self.combo_nomes.currentText()).split(' - ')[2])
+    def combo_ingrediente_to_nome(self, item):
+        try:
+            self.txt_nome.setText(str(self.combo_nomes.currentText()).split(' - ')[0])
+            self.txt_tam_embalagem.setText(str(self.combo_nomes.currentText()).split(' - ')[1])
+            self.txt_unidade.setText(str(self.combo_nomes.currentText()).split(' - ')[2])
+        except:
+            self.txt_nome.clear()
+            self.txt_tam_embalagem.clear()
+            self.txt_unidade.clear()
+
 
     def carrega_combo_marcas(self):
         self.combo_marca.clear()
@@ -61,7 +101,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def carrega_combo_ingredientes(self):
         self.combo_nomes.clear()
-        nomes_ingredientes = database_receita.select_ingredientes_nomes()
+        nomes_ingredientes = ['Ingredientes ja cadastrados']
+        nomes_ingredientes += database_receita.select_ingredientes_nomes()
         self.combo_nomes.addItems(nomes_ingredientes)
 
     def ativa_marca_nova(self):
@@ -82,3 +123,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.txt_unidade.clear()
         self.txt_marca.clear()
         self.txt_marca.setEnabled(False)
+        self.carrega_combo_ingredientes()
+
+'''
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    janela_tela_principal = MainWindow()
+    janela_tela_principal.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
+'''

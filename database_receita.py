@@ -9,19 +9,23 @@ def insere_TABELA(entradas):
         
         cursor.execute('INSERT INTO tabela(dados) VALUES(:dados)', {'dados':entradas})
 
-def insere_loja(nomeLoja):
+def insere_loja(nome_loja):
+    nome_loja = nome_loja.lower()
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
-        cursor.execute('INSERT INTO lojas(nome) VALUES(:nome)', {'nome':nomeLoja})
+        cursor.execute('INSERT INTO lojas(nome) VALUES(:nome)', {'nome':nome_loja})
 
 def insere_marca(nome):
+    nome = nome.lower()
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
         cursor.execute('INSERT INTO marcas(nome) VALUES(:nome)', {'nome':nome})
 
 def insere_ingrediente(nome, unidade, tamanho, id_marca):
+    nome = nome.lower()
+    unidade = unidade.lower()
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
@@ -59,6 +63,7 @@ def select_marcas_nomes():
         return lista_marcas_str
 
 def select_marca_por_nome(nomeMarca):
+    nomeMarca = nomeMarca.lower()
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
 
@@ -83,4 +88,56 @@ def select_ingredientes_nomes():
 
         return lista_ingredientes_str
 
+def select_ingredientes_lista():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT i.id_ingrediente, i.nome, i.tam_embalagem, i.unidade, m.nome FROM ingredientes i, marcas m WHERE i.id_marca_ingredientes = m.id_marca')
+        
+        lista_ingredientes = cursor.fetchall()
+
+        return lista_ingredientes
+
+def update_ingrediente(cod, nome, unidade, tamanho, id_marca):
+    nome = nome.lower()
+    unidade = unidade.lower()
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('UPDATE ingredientes SET nome = :nome, unidade = :unidade, tam_embalagem = :tamanho, id_marca_ingredientes = :marca WHERE id_ingrediente = :cod', [nome, unidade, tamanho, id_marca, cod])
+        
+
+def delete_ingrediente(cod):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('DELETE FROM ingredientes WHERE id_ingrediente = ?', [cod])
+
+
+def varifica_marca_duplicada(nome):
+    nome = nome.lower()
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT * FROM marcas WHERE nome = :nome', {'nome': nome})
+        
+        marca_duplicada = cursor.fetchone()
+
+        return True if(marca_duplicada) else False
+
+def varifica_ingrediente_duplicado(nome, unidade, tamanho, id_marca):
+    nome = nome.lower()
+    unidade = unidade.lower()
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT * FROM ingredientes WHERE nome = :nome AND unidade = :unidade AND tam_embalagem = :tamanho AND id_marca_ingredientes = :marca', {'nome': nome,'unidade': unidade,'tamanho': tamanho,'marca': id_marca})
+        
+        ingrediente_duplicado = cursor.fetchone()
+
+        return True if(ingrediente_duplicado) else False
+
+
+
 #print(select_marcas_nomes())
+#print(varifica_ingrediente_duplicado('Chocolate', 'g', 150, 2))

@@ -1,8 +1,11 @@
 import sqlite3
+import os
 
 nome_database = 'db_receitas'
 
 def criar_tabelas():
+    os.remove(nome_database+'.db')
+    
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         

@@ -8,6 +8,7 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     switch_tela_cadastro_ingrediente = QtCore.pyqtSignal()
+    switch_tela_gerenciar_ingrediente = QtCore.pyqtSignal()
     switch_tela_cadastro_receita = QtCore.pyqtSignal()
 
     def __init__(self):
@@ -50,7 +51,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             print('TROCAR PARA TELA ADICIONAR',str(nomeTela))
     
     def abrir_tela_gerenciar(self, nomeTela):
-        print('TROCAR PARA TELA GERENCIAR',str(nomeTela))
+        if(nomeTela == 'ingredientes'):
+            self.switch_tela_gerenciar_ingrediente.emit()
+        else:
+            print('TROCAR PARA TELA GERENCIAR',str(nomeTela))
 
     def txt_to_btn(self, texto):
         self.addButton.setText(texto)
