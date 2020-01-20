@@ -10,13 +10,6 @@ def criar_tabelas():
         cursor = conexao.cursor()
         
         #CRIAR TABELAS
-        #TABELA LOJAS
-        cursor.execute('''
-            CREATE TABLE lojas (
-                id_loja INTEGER PRIMARY KEY,
-                nome TEXT
-            )''')
-        
         #TABELA MARCAS
         cursor.execute('''
             CREATE TABLE marcas (
@@ -28,25 +21,55 @@ def criar_tabelas():
         cursor.execute('''
             CREATE TABLE ingredientes (
                 id_ingrediente INTEGER PRIMARY KEY,
-                nome TEXT,
-                unidade TEXT,
-                tam_embalagem REAL,
-                id_marca_ingredientes INTEGER,
-                FOREIGN KEY (id_marca_ingredientes) REFERENCES marcas (id_marca)
+                nome TEXT
+            )''')
+
+        #TABELA EMBALAGENS
+        cursor.execute('''
+            CREATE TABLE embalagens (
+                id_embalagens INTEGER PRIMARY KEY,
+                tamanho TEXT,
+                unidade REAL,
+                id_ingrediente_embalagens INTEGER,
+                id_marca_embalagens INTEGER,
+                FOREIGN KEY (id_ingrediente_embalagens) REFERENCES ingredientes (id_ingrediente),
+                FOREIGN KEY (id_marca_embalagens) REFERENCES marcas (id_marca)
+            )''')
+
+        #TABELA LOJAS
+        cursor.execute('''
+            CREATE TABLE lojas (
+                id_lojas INTEGER PRIMARY KEY,
+                nome TEXT
             )''')
         
-        #TABELA INGRED_LOJA
+        #TABELA LOJA_EMBALA
         cursor.execute('''
-            CREATE TABLE ingred_loja (
-                id_ingred_loja INTEGER PRIMARY KEY,
+            CREATE TABLE loja_embala (
+                id_loja_embala INTEGER PRIMARY KEY,
                 preco REAL,
-                data TEXT,
-                ativo INTEGER,
-                mais_recente INTEGER,
-                id_ingrediente_ingred_loja INTEGER,
-                id_loja_ingred_loja INTEGER,
-                FOREIGN KEY (id_loja_ingred_loja) REFERENCES lojas (id_lojas),
-                FOREIGN KEY (id_ingrediente_ingred_loja) REFERENCES ingredientes (id_ingrediente)
+                id_loja_loja_embala INTEGER,
+                id_ingrediente_loja_embala INTEGER,
+                FOREIGN KEY (id_loja_loja_embala) REFERENCES lojas (id_lojas),
+                FOREIGN KEY (id_ingrediente_loja_embala) REFERENCES ingredientes (id_ingrediente)
+            )''')
+
+        #TABELA COMPRAS
+        cursor.execute('''
+            CREATE TABLE compras (
+                id_compra INTEGER PRIMARY KEY,
+                nome TEXT
+            )''')
+        
+        #TABELA COMP_LOJA
+        cursor.execute('''
+            CREATE TABLE comp_loja (
+                id_comp_loja INTEGER PRIMARY KEY,
+                preco REAL,
+                id_compra_comp_loja INTEGER,
+                id_loja_embala_comp_loja INTEGER,
+                FOREIGN KEY (id_compra_comp_loja) REFERENCES compras (id_compra),
+                FOREIGN KEY (id_loja_embala_comp_loja) REFERENCES loja_embala (id_loja_embala)
             )''')
 
         #TABELA RECEITAS

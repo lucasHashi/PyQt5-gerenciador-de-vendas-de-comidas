@@ -14,45 +14,82 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
         Ui_MainWindow_tela1.__init__(self)
         self.setupUi(self)
 
-        self.btn_editar.clicked.connect(self.abrir_tela_editar)
+        self.btn_editar.clicked.connect(self.ativar_edicao)
         self.btn_excluir.clicked.connect(self.excluir_item)
-        self.btn_cancelar.clicked.connect(self.fechar)
+        self.btn_voltar.clicked.connect(self.fechar)
 
-        self.tb_dados.itemDoubleClicked.connect(self.abrir_tela_editar)
+        self.btn_salvar.clicked.connect(self.editar)
+        self.btn_cancelar.clicked.connect(self.cancelar_edicao)
+
+        self.tb_dados.itemDoubleClicked.connect(self.ativar_edicao)
 
         self.carrega_tb_dados()
 
         header = self.tb_dados.horizontalHeader() 
-        self.tb_dados.setHorizontalHeaderLabels(['Codigo', 'Nome', 'Tamanho', 'Unidade', 'Marca'])     
+        self.tb_dados.setHorizontalHeaderLabels(['Codigo', 'Nome'])
         #header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(4, QtWidgets.QHeaderView.ResizeToContents)
 
-    def excluir_item(self):
-        item = self.tb_dados.currentItem()
-        linha_selec = item.row()
-        cod = self.tb_dados.item(linha_selec, 0).text()
+    def editar(self):
+        cod = self.txt_codigo.text()
+        nome_ingred = self.txt_nome.text()
 
-        database_receita.delete_ingrediente(cod)
+        if(not database_receita.varifica_ingrediente_duplicado(nome_ingred)):
+            database_receita.update_ingrediente(cod, nome_ingred)
         
         self.carrega_tb_dados()
+        self.cancelar_edicao()
 
-    def abrir_tela_editar(self, item):
-        try:
-            linha_selec = item.row()
-        except:
+    def excluir_item(self):
+        if(self.tb_dados.rowCount() > 0):
             item = self.tb_dados.currentItem()
-            linha_selec = item.row()
-        finally:
-            cod = self.tb_dados.item(linha_selec, 0).text()
-            nome = self.tb_dados.item(linha_selec, 1).text()
-            tamanho = float(self.tb_dados.item(linha_selec, 2).text())
-            unidade = self.tb_dados.item(linha_selec, 3).text()
-            marca = self.tb_dados.item(linha_selec, 4).text()
+            try:
+                linha_selec = item.row()
+                cod = self.tb_dados.item(linha_selec, 0).text()
 
-            self.switch_tela_editar_ingrediente.emit(cod,nome,tamanho,unidade,marca)
+                database_receita.delete_ingrediente(cod)
+                
+                self.carrega_tb_dados()
+            except:
+                pass
+
+    def ativar_edicao(self, item):
+        if(self.tb_dados.rowCount() > 0):
+            try:
+                linha_selec = item.row()
+            except:
+                item = self.tb_dados.currentItem()
+                linha_selec = item.row()
+            finally:
+                cod = self.tb_dados.item(linha_selec, 0).text()
+                nome = self.tb_dados.item(linha_selec, 1).text()
+
+                self.txt_codigo.setText(str(cod))
+                self.txt_nome.setText(nome)
+                self.txt_nome.setPlaceholderText(nome)
+
+                self.tb_dados.setEnabled(False)
+                self.btn_editar.setEnabled(False)
+                self.btn_excluir.setEnabled(False)
+                self.btn_voltar.setEnabled(False)
+
+                self.txt_nome.setEnabled(True)
+                self.btn_salvar.setEnabled(True)
+                self.btn_cancelar.setEnabled(True)
+    
+    def cancelar_edicao(self):
+        self.txt_codigo.clear()
+        self.txt_nome.clear()
+        self.txt_nome.setPlaceholderText('')
+
+        self.tb_dados.setEnabled(True)
+        self.btn_editar.setEnabled(True)
+        self.btn_excluir.setEnabled(True)
+        self.btn_voltar.setEnabled(True)
+
+        self.txt_nome.setEnabled(False)
+        self.btn_salvar.setEnabled(False)
+        self.btn_cancelar.setEnabled(False)
     
     def carrega_tb_dados(self):
         lista_dados = database_receita.select_ingredientes_lista()

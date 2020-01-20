@@ -247,6 +247,11 @@
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
          </widget>
         </item>
        </layout>
@@ -394,6 +399,11 @@
          <widget class="QTableWidget" name="tb_ingredientes">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
           </property>
          </widget>
         </item>

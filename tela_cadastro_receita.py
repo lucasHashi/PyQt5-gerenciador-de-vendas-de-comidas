@@ -11,6 +11,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+        
+        self.receita_ativa = False
+        self.id_receita_atual = 0
 
         #CONFIG BOTOES
         self.btn_adicionar.pressed.connect(self.adicionar_ingrediente)
