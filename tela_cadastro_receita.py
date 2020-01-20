@@ -12,8 +12,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         
-        self.receita_ativa = False
-        self.id_receita_atual = 0
+        #INICIA RECEITA
+        #LISTA COM LISTAS = [id_ingrediente, nome, quantidade, unidade]
+        self.receita = []
 
         #CONFIG BOTOES
         self.btn_adicionar.pressed.connect(self.adicionar_ingrediente)
@@ -26,24 +27,93 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_cad_limpar.pressed.connect(self.cadastrar_limpar)
 
         #CARREGAR INGREDIENTES
-        lista_ingredientes = database_receita.select_ingredientes_nomes()
-        self.list_ingredientes.addItems(lista_ingredientes)
+        self.carrega_ingredientes()
 
         #QUANDO UM ITEM FOR DOUBLE-CLICADO
         self.list_ingredientes.itemDoubleClicked.connect(self.ingrediente_selecionado)
     
+    def carrega_ingredientes(self):
+        self.list_ingredientes.clear()
+        lista_ingredientes = database_receita.select_ingredientes_nomes()
+
+        #LISTA TODOS OS CODIGOS DE INGREDIENTES JA ADICIONADOS A RECEITA
+        codigos_ingredientes = []
+        for item in self.receita:
+            cod = item[0]
+            codigos_ingredientes.append(cod)
+
+        #VERIFICAR SE JA NAO ESTA ADICIONADO A RECEITA
+        ingredientes_nao_usados = []
+        for item in lista_ingredientes:
+            cod_ingred = item.split(' - ')[0]
+            if(not cod_ingred in codigos_ingredientes):
+                ingredientes_nao_usados.append(item)
+        
+        self.list_ingredientes.addItems(ingredientes_nao_usados)
+
+    def carrega_ingredientes_receita(self):
+        if(self.receita):
+            self.tb_ingredientes.setRowCount(0)
+            for linha in range(len(self.receita)):
+                self.tb_ingredientes.insertRow(linha)
+                for coluna in range(len(self.receita[0])):
+                    self.tb_ingredientes.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(self.receita[linha][coluna])))
+        else:
+            self.tb_ingredientes.clear()
+
     def adicionar_ingrediente(self):
         if(str(self.txt_ingrediente.text()) and str(self.txt_quantidade.text())):
             #ADICIONAR INGREDIENTE NA TABELA
-            ingrediente, quantidade, unidade = str(self.txt_ingrediente.text()).split(' - ')
+            codigo, ingrediente = str(self.txt_ingrediente.text()).split(' - ')
+            quantidade = self.txt_quantidade.text()
+            unidade = self.txt_unidade_ingred.text()
+
+            self.receita.append([codigo, ingrediente, quantidade, unidade])
+            self.carrega_ingredientes_receita()
+            self.carrega_ingredientes()
+
+            self.txt_quantidade.setEnabled(False)
+
+            self.txt_ingrediente.clear()
+            self.txt_quantidade.clear()
+            self.txt_unidade_ingred.clear()
         else:
             pass
     
     def ingrediente_selecionado(self, item):
-        self.txt_ingrediente.setText(str(item.text()))
+        cod, nome, unidade = str(item.text()).split(' - ')
+
+        self.txt_quantidade.setEnabled(True)
+
+        self.txt_ingrediente.setText(cod+' - '+nome)
+        self.txt_unidade_ingred.setText(unidade)
     
     def remover_ingrediente(self):
-        pass
+        #CASO TENHA UMA LINHA SELECIONADA
+        try:
+            #PEGAR O CODIGO DO ITEM SELECIONADO
+            item = self.tb_ingredientes.currentItem()
+            linha_selec = item.row()
+            cod_selecionado = self.tb_ingredientes.item(linha_selec, 0).text()
+
+            #REMOVER DA LISTA receita PELO CODIGO DO INGREDIENTE
+            for i in range(len(self.receita)):
+                item = self.receita[i]
+                cod = item[0]
+                if(cod == cod_selecionado):
+                    self.receita.pop(i)
+                    break
+            
+            self.carrega_ingredientes_receita()
+            self.carrega_ingredientes()
+
+            self.txt_quantidade.setEnabled(False)
+
+            self.txt_ingrediente.clear()
+            self.txt_quantidade.clear()
+            self.txt_unidade_ingred.clear()
+        except:
+            pass
 
     def cadastrar_voltar(self):
         self.cadastrar()
@@ -51,24 +121,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def cadastrar_limpar(self):
         self.cadastrar()
-        self.limpar()
+        self.recomecar()
 
     def cadastrar(self):
-        nomeIngred = self.txt_nome.text()
-        unidade = self.txt_unidade.text()
-        tamanho = float(str(self.txt_tam_embalagem.text()).replace(',','.'))
-        nomeMarca = self.txt_marca.text()
+        if(self.receita):
+            nome_receita = self.txt_nome.text()
+            validade = self.spin_validade.value()
+            rendimento = self.txt_rendimento.text()
+            unidade = self.txt_unidade.text()
 
-        if(nomeMarca.replace(' ','')):
-            #ADICIONA ESSA NOVA MARCA
-            database_receita.insere_marca(nomeMarca)
-            #SELECIONA O id_marca DA MARCA COM nome = 'nomeMarca'
-            id_marca = int(database_receita.select_marca_por_nome(nomeMarca))
-            self.carrega_combo_marcas()
-        else:
-            id_marca = int(str(self.combo_marca.currentText()).split(' - ')[0])
+            #ADICIONAR RECEITA
+            cod_receita = database_receita.insere_receita(nome_receita, validade, rendimento, unidade)
+            #PEGAR O CODIGO DA ULTIMA RECEITA ADICIONADA
+            #cod_receita = database_receita.cod_ultimo_insert()
 
-        database_receita.insere_ingrediente(nomeIngred, unidade, tamanho, id_marca)
+            #PARA CADA INGRED EM receita
+            for cod_ingred, nome_ingred, quantidade, unidade in self.receita:
+                #ADICIONAR INGRED NA TABELA DE LIGACAO COM O cod_receita
+                database_receita.insere_ingred_receita(cod_receita, cod_ingred, quantidade)
 
     def carrega_combo_marcas(self):
         self.combo_marca.clear()
@@ -95,8 +165,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_adicionar.setEnabled(True)
         self.btn_remover.setEnabled(True)
 
-        self.txt_ingrediente.setEnabled(True)
-        self.txt_quantidade.setEnabled(True)
+        #self.txt_ingrediente.setEnabled(True)
+        #self.txt_quantidade.setEnabled(True)
+        #self.txt_unidade_ingred.setEnabled(True)
 
         self.list_ingredientes.setEnabled(True)
         self.tb_ingredientes.setEnabled(True)
@@ -110,8 +181,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_adicionar.setEnabled(False)
         self.btn_remover.setEnabled(False)
 
-        self.txt_ingrediente.setEnabled(False)
-        self.txt_quantidade.setEnabled(False)
+        #self.txt_ingrediente.setEnabled(False)
+        #self.txt_quantidade.setEnabled(False)
+        #self.txt_unidade_ingred.setEnabled(False)
 
         self.list_ingredientes.setEnabled(False)
         self.tb_ingredientes.setEnabled(False)
@@ -123,5 +195,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.txt_ingrediente.clear()
         self.txt_quantidade.clear()
+        self.txt_unidade_ingred.clear()
+
+        self.receita = []
+        self.tb_ingredientes.clear()
         
         self.desativar_receita()
+
+        self.carrega_ingredientes()

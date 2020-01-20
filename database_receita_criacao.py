@@ -21,15 +21,15 @@ def criar_tabelas():
         cursor.execute('''
             CREATE TABLE ingredientes (
                 id_ingrediente INTEGER PRIMARY KEY,
-                nome TEXT
+                nome TEXT,
+                unidade TEXT
             )''')
 
         #TABELA EMBALAGENS
         cursor.execute('''
             CREATE TABLE embalagens (
                 id_embalagens INTEGER PRIMARY KEY,
-                tamanho TEXT,
-                unidade REAL,
+                tamanho REAL,
                 id_ingrediente_embalagens INTEGER,
                 id_marca_embalagens INTEGER,
                 FOREIGN KEY (id_ingrediente_embalagens) REFERENCES ingredientes (id_ingrediente),

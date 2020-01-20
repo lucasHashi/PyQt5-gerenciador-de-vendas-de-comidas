@@ -23,13 +23,35 @@ def insere_marca(nome):
         
         cursor.execute('INSERT INTO marcas(nome) VALUES(:nome)', {'nome':nome})
 
-def insere_ingrediente(nome):
+def insere_ingrediente(nome, unidade):
     nome = nome.lower()
+    unidade = unidade.lower()
     
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
-        cursor.execute('INSERT INTO ingredientes(nome) VALUES(:nome)', {'nome':nome})
+        cursor.execute('INSERT INTO ingredientes(nome, unidade) VALUES(:nome, :unid)', {'nome':nome, 'unid': unidade})
+
+def insere_receita(nome_receita, validade, rendimento, unidade):
+    nome_receita = nome_receita.lower()
+    unidade = unidade.lower()
+    
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('INSERT INTO receitas(nome, rendimento, unidade, validade) VALUES(:nome, :rendi, :unid, :vali)', {'nome':nome_receita, 'rendi': rendimento, 'unid': unidade, 'vali': validade})
+
+        cursor.execute('select last_insert_rowid()')
+
+        ultimo_cod = cursor.fetchone()[0]
+
+        return ultimo_cod
+
+def insere_ingred_receita(cod_receita, cod_ingred, quantidade):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('INSERT INTO ingred_receita(quantidade, id_receita_ingred_receita, id_ingrediente_ingred_receita) VALUES(:quant, :receita, :ingred)', {'quant':quantidade, 'receita': cod_receita, 'ingred': cod_ingred})
 
 
 def select_lojas_nomes():
@@ -77,13 +99,13 @@ def select_ingredientes_nomes():
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
 
-        cursor.execute('SELECT DISTINCT nome FROM ingredientes')
+        cursor.execute('SELECT DISTINCT * FROM ingredientes')
         
         lista_ingredientes = cursor.fetchall()
         lista_ingredientes_str = []
         
         for linha in lista_ingredientes:
-            ingrediente = '{}'.format(linha[0])
+            ingrediente = '{} - {} - {}'.format(linha[0], linha[1], linha[2])
             lista_ingredientes_str.append(ingrediente)
 
         return lista_ingredientes_str
@@ -92,25 +114,32 @@ def select_ingredientes_lista():
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
 
-        cursor.execute('SELECT id_ingrediente, nome FROM ingredientes')
+        cursor.execute('SELECT * FROM ingredientes')
         
         lista_ingredientes = cursor.fetchall()
 
         return lista_ingredientes
 
-def update_ingrediente(cod, nome):
+
+
+def update_ingrediente(cod, nome, unidade):
     nome = nome.lower()
+    unidade = unidade.lower()
     
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
-        cursor.execute('UPDATE ingredientes SET nome = ? WHERE id_ingrediente = ?', [nome, cod])
+        cursor.execute('UPDATE ingredientes SET nome = ?, unidade = ? WHERE id_ingrediente = ?', [nome, unidade, cod])
+
+
 
 def delete_ingrediente(cod):
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
         cursor.execute('DELETE FROM ingredientes WHERE id_ingrediente = ?', [cod])
+
+
 
 def varifica_marca_duplicada(nome):
     nome = nome.lower()
@@ -135,6 +164,16 @@ def varifica_ingrediente_duplicado(nome):
 
         return True if(ingrediente_duplicado) else False
 
+
+def cod_ultimo_insert():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('select last_insert_rowid()')
+
+        ultimo_cod = cursor.fetchone()[0]
+
+        return ultimo_cod
 
 
 #print(select_marcas_nomes())

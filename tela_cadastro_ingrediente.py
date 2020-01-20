@@ -25,39 +25,53 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def cadastrar_voltar(self):
         nome = self.txt_nome.text()
         nome = True if(nome.replace(' ','')) else False
+        unidade = self.txt_unidade.text()
+        unidade = True if(unidade.replace(' ','')) else False
         
-        if(nome):
+        if(nome*unidade):
             self.cadastrar()
             self.fechar_tela()
 
     def cadastrar_limpar(self):
         nome = self.txt_nome.text()
         nome = True if(nome.replace(' ','')) else False
-
-        if(nome):
+        unidade = self.txt_unidade.text()
+        unidade = True if(unidade.replace(' ','')) else False
+        
+        if(nome*unidade):
             self.cadastrar()
             self.limpar()
 
     def cadastrar(self):
         nome_ingred = self.txt_nome.text()
+        unidade = self.txt_unidade.text()
 
         self.carrega_combo_ingredientes()
 
         if(not database_receita.varifica_ingrediente_duplicado(nome_ingred)):
-            database_receita.insere_ingrediente(nome_ingred)
+            database_receita.insere_ingrediente(nome_ingred, unidade)
 
     def combo_ingrediente_to_nome(self, item):
-        ingred_selecionado = str(self.combo_nomes.currentText())
-        if(ingred_selecionado == 'Ingredientes ja cadastrados'):
+        try:
+            nome, unidade = str(self.combo_nomes.currentText()).split(' - ')
+            self.txt_nome.setText(nome)
+            self.txt_unidade.setText(unidade)
+        except:
             self.txt_nome.clear()
-        else:
-            self.txt_nome.setText(ingred_selecionado)
+            self.txt_unidade.clear()
     
     def carrega_combo_ingredientes(self):
         self.combo_nomes.clear()
         
         nomes_ingredientes = ['Ingredientes ja cadastrados']
-        nomes_ingredientes += database_receita.select_ingredientes_nomes()
+        lista_ingredientes = database_receita.select_ingredientes_nomes()
+
+        if(lista_ingredientes):
+            for item in lista_ingredientes:
+                cod, nome, unidade = item.split(' - ')
+                nome_item = '{} - {}'.format(nome, unidade)
+                nomes_ingredientes.append(nome_item)
+        
         self.combo_nomes.addItems(nomes_ingredientes)
 
     def fechar_tela(self):
@@ -65,6 +79,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def limpar(self):
         self.txt_nome.clear()
+        self.txt_unidade.clear()
         self.carrega_combo_ingredientes()
 
         

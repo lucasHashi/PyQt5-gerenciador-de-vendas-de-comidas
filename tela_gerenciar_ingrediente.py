@@ -26,16 +26,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
         self.carrega_tb_dados()
 
         header = self.tb_dados.horizontalHeader() 
-        self.tb_dados.setHorizontalHeaderLabels(['Codigo', 'Nome'])
+        self.tb_dados.setHorizontalHeaderLabels(['Codigo', 'Nome', 'Unidade'])
         #header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
 
     def editar(self):
         cod = self.txt_codigo.text()
         nome_ingred = self.txt_nome.text()
+        unidade = self.txt_unidade.text()
 
         if(not database_receita.varifica_ingrediente_duplicado(nome_ingred)):
-            database_receita.update_ingrediente(cod, nome_ingred)
+            database_receita.update_ingrediente(cod, nome_ingred, unidade)
         
         self.carrega_tb_dados()
         self.cancelar_edicao()
@@ -63,10 +65,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
             finally:
                 cod = self.tb_dados.item(linha_selec, 0).text()
                 nome = self.tb_dados.item(linha_selec, 1).text()
+                unidade = self.tb_dados.item(linha_selec, 2).text()
 
                 self.txt_codigo.setText(str(cod))
                 self.txt_nome.setText(nome)
                 self.txt_nome.setPlaceholderText(nome)
+                self.txt_unidade.setText(unidade)
+                self.txt_unidade.setPlaceholderText(unidade)
 
                 self.tb_dados.setEnabled(False)
                 self.btn_editar.setEnabled(False)
@@ -102,6 +107,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
     
     def limpar(self):
         self.txt_nome.clear()
+        self.txt_unidade.clear()
         self.txt_comida.clear()
     
     def fechar(self):
