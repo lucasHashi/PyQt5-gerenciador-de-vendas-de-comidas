@@ -120,6 +120,30 @@ def select_ingredientes_lista():
 
         return lista_ingredientes
 
+def select_receitas_lista():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT id_receita, nome, validade, rendimento, unidade FROM receitas')
+        
+        lista_receitas = cursor.fetchall()
+
+        return lista_receitas
+
+def select_ingredientes_de_receita(cod_receita):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        #cod_ingrediente, ingrediente, quantidade, unidade
+        cursor.execute('''SELECT i.id_ingrediente, i.nome, ir.quantidade, r.unidade
+                            FROM ingredientes i, ingred_receita ir, receitas r
+                            WHERE ? = r.id_receita
+                            AND r.id_receita = ir.id_receita_ingred_receita
+                            AND ir.id_ingrediente_ingred_receita = i.id_ingrediente''', [cod_receita])
+        
+        lista_ingredientes_receita = cursor.fetchall()
+
+        return lista_ingredientes_receita
+
 
 
 def update_ingrediente(cod, nome, unidade):
@@ -130,6 +154,14 @@ def update_ingrediente(cod, nome, unidade):
         cursor = conexao.cursor()
         
         cursor.execute('UPDATE ingredientes SET nome = ?, unidade = ? WHERE id_ingrediente = ?', [nome, unidade, cod])
+
+def update_receita(cod_receita, validade, rendimento, unidade):
+    unidade = unidade.lower()
+    
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('UPDATE receita SET validade = ?, rendimento = ?, unidade = ? WHERE id_receita = ?', [validade, rendimento, unidade, cod_receita])
 
 
 
@@ -174,6 +206,13 @@ def cod_ultimo_insert():
         ultimo_cod = cursor.fetchone()[0]
 
         return ultimo_cod
+
+
+def zerar_receita(cod_receita):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('DELETE FROM ingred_receita WHERE id_receita_ingred_receita = :cod', {'cod': cod_receita})
 
 
 #print(select_marcas_nomes())

@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1107</width>
-    <height>639</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,4,4,1">
       <item>
@@ -33,7 +33,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Cadastrar receita</string>
+           <string>Editar receita</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -68,24 +68,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="txt_nome">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="lbl_rendimento">
           <property name="sizePolicy">
@@ -115,6 +97,15 @@
             <verstretch>2</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="combo_nomes">
           <property name="font">
            <font>
             <pointsize>11</pointsize>
@@ -424,7 +415,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="7,5,3">
       <item>
-       <widget class="QPushButton" name="btn_cad_limpar">
+       <widget class="QPushButton" name="btn_salvar_limpar">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -437,12 +428,12 @@
          </font>
         </property>
         <property name="text">
-         <string>Cadastrar e limpar</string>
+         <string>Salvar e limpar</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_cad_sair">
+       <widget class="QPushButton" name="btn_salvar_sair">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -455,7 +446,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Cadastrar e sair</string>
+         <string>Salvar e sair</string>
         </property>
        </widget>
       </item>
@@ -514,11 +505,6 @@
    </layout>
   </widget>
  </widget>
- <tabstops>
-  <tabstop>txt_nome</tabstop>
-  <tabstop>txt_ingrediente</tabstop>
-  <tabstop>btn_voltar</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

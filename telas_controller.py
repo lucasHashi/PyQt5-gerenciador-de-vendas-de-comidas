@@ -5,6 +5,7 @@ import tela_principal
 import tela_cadastro_ingrediente
 import tela_gerenciar_ingrediente
 import tela_cadastro_receita
+import tela_gerenciar_receita
 
 class Controller:
 
@@ -16,6 +17,7 @@ class Controller:
         self.janela_tela_principal.switch_tela_cadastro_ingrediente.connect(self.abre_tela_cadastro_ingrediente)
         self.janela_tela_principal.switch_tela_cadastro_receita.connect(self.abre_tela_cadastro_receita)
         self.janela_tela_principal.switch_tela_gerenciar_ingrediente.connect(self.abre_tela_gerenciar_ingrediente)
+        self.janela_tela_principal.switch_tela_gerenciar_receita.connect(self.abre_tela_gerenciar_receita)
         self.janela_tela_principal.show()
 
     def abre_tela_cadastro_ingrediente(self):
@@ -29,6 +31,10 @@ class Controller:
     def abre_tela_cadastro_receita(self):
         self.janela_tela_cadastro_receita = tela_cadastro_receita.MainWindow()
         self.janela_tela_cadastro_receita.show()
+    
+    def abre_tela_gerenciar_receita(self):
+        self.janela_tela_gerenciar_receita = tela_gerenciar_receita.MainWindow()
+        self.janela_tela_gerenciar_receita.show()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

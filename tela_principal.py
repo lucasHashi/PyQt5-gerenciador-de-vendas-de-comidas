@@ -10,6 +10,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     switch_tela_cadastro_ingrediente = QtCore.pyqtSignal()
     switch_tela_gerenciar_ingrediente = QtCore.pyqtSignal()
     switch_tela_cadastro_receita = QtCore.pyqtSignal()
+    switch_tela_gerenciar_receita = QtCore.pyqtSignal()
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -53,6 +54,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def abrir_tela_gerenciar(self, nomeTela):
         if(nomeTela == 'ingredientes'):
             self.switch_tela_gerenciar_ingrediente.emit()
+        elif(nomeTela == 'receitas'):
+            self.switch_tela_gerenciar_receita.emit()
         else:
             print('TROCAR PARA TELA GERENCIAR',str(nomeTela))
 
