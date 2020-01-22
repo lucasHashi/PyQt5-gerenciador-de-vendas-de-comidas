@@ -172,7 +172,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="txt_unidade">
+         <widget class="QLineEdit" name="txt_unidade_receita">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
@@ -516,8 +516,21 @@
  </widget>
  <tabstops>
   <tabstop>txt_nome</tabstop>
+  <tabstop>txt_rendimento</tabstop>
+  <tabstop>spin_validade</tabstop>
+  <tabstop>txt_unidade_receita</tabstop>
+  <tabstop>btn_iniciar</tabstop>
+  <tabstop>list_ingredientes</tabstop>
   <tabstop>txt_ingrediente</tabstop>
+  <tabstop>txt_quantidade</tabstop>
+  <tabstop>txt_unidade_ingred</tabstop>
+  <tabstop>btn_adicionar</tabstop>
+  <tabstop>btn_remover</tabstop>
+  <tabstop>tb_ingredientes</tabstop>
+  <tabstop>btn_cad_limpar</tabstop>
+  <tabstop>btn_cad_sair</tabstop>
   <tabstop>btn_voltar</tabstop>
+  <tabstop>btn_recomecar</tabstop>
  </tabstops>
  <resources/>
  <connections/>

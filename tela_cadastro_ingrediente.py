@@ -48,7 +48,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.carrega_combo_ingredientes()
 
-        if(not database_receita.varifica_ingrediente_duplicado(nome_ingred)):
+        if(not database_receita.verifica_ingrediente_duplicado(nome_ingred)):
             database_receita.insere_ingrediente(nome_ingred, unidade)
 
     def combo_ingrediente_to_nome(self, item):

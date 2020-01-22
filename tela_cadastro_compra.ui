@@ -7,16 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>1107</width>
-    <height>640</height>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,4,4,1">
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,4,0,1">
       <item>
        <layout class="QHBoxLayout" name="lay_hori_titulo">
         <property name="spacing">
@@ -33,7 +33,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Editar receita</string>
+           <string>Cadastrar compra</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -68,44 +68,8 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="lbl_rendimento">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Rendimento</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="txt_rendimento">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
-         <widget class="QComboBox" name="combo_nomes">
+         <widget class="QDateEdit" name="date_data">
           <property name="font">
            <font>
             <pointsize>11</pointsize>
@@ -121,7 +85,7 @@
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="lbl_validade">
+         <widget class="QLabel" name="lbl_loja">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -134,57 +98,15 @@
            </font>
           </property>
           <property name="text">
-           <string>Validade (dias)</string>
+           <string>Loja</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="lbl_unidade">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Unidade</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="txt_unidade_receita">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QSpinBox" name="spin_validade">
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-         </widget>
+         <widget class="QComboBox" name="combo_loja"/>
         </item>
        </layout>
       </item>
@@ -213,7 +135,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" stretch="1,9">
         <item>
-         <widget class="QLabel" name="lbl_ingredientes">
+         <widget class="QLabel" name="lbl_produtos">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -226,7 +148,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Selecionar ingrediente</string>
+           <string>Selecionar produto</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -234,7 +156,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="list_ingredientes">
+         <widget class="QListWidget" name="list_produtos">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -257,7 +179,7 @@
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="lbl_ingrediente">
+             <widget class="QLabel" name="lbl_produto">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -270,18 +192,18 @@
                </font>
               </property>
               <property name="text">
-               <string>Ingrediente</string>
+               <string>Produto</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
               <property name="buddy">
-               <cstring>txt_ingrediente</cstring>
+               <cstring>txt_produto</cstring>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="txt_ingrediente">
+             <widget class="QLineEdit" name="txt_produto">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -329,7 +251,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="txt_unidade_ingred">
+               <widget class="QLineEdit" name="txt_unidade">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -384,7 +306,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tb_ingredientes">
+         <widget class="QTableWidget" name="tb_produtos">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -415,7 +337,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="7,5,3">
       <item>
-       <widget class="QPushButton" name="btn_salvar_limpar">
+       <widget class="QPushButton" name="btn_cad_limpar">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -428,12 +350,12 @@
          </font>
         </property>
         <property name="text">
-         <string>Salvar e limpar</string>
+         <string>Cadastrar e limpar</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_salvar_sair">
+       <widget class="QPushButton" name="btn_cad_sair">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -446,7 +368,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Salvar e sair</string>
+         <string>Cadastrar e sair</string>
         </property>
        </widget>
       </item>
@@ -506,20 +428,18 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>combo_nomes</tabstop>
-  <tabstop>txt_rendimento</tabstop>
-  <tabstop>spin_validade</tabstop>
-  <tabstop>txt_unidade_receita</tabstop>
+  <tabstop>date_data</tabstop>
+  <tabstop>combo_loja</tabstop>
   <tabstop>btn_iniciar</tabstop>
-  <tabstop>list_ingredientes</tabstop>
-  <tabstop>txt_ingrediente</tabstop>
+  <tabstop>list_produtos</tabstop>
+  <tabstop>txt_produto</tabstop>
   <tabstop>txt_quantidade</tabstop>
-  <tabstop>txt_unidade_ingred</tabstop>
+  <tabstop>txt_unidade</tabstop>
   <tabstop>btn_adicionar</tabstop>
   <tabstop>btn_remover</tabstop>
-  <tabstop>tb_ingredientes</tabstop>
-  <tabstop>btn_salvar_limpar</tabstop>
-  <tabstop>btn_salvar_sair</tabstop>
+  <tabstop>tb_produtos</tabstop>
+  <tabstop>btn_cad_limpar</tabstop>
+  <tabstop>btn_cad_sair</tabstop>
   <tabstop>btn_voltar</tabstop>
   <tabstop>btn_recomecar</tabstop>
  </tabstops>

@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
-    <height>526</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="7,5">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,7,3">
       <item>
@@ -31,7 +31,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Listar ingredientes</string>
+         <string>Listar lojas</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -135,7 +135,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Editar ingrediente</string>
+         <string>Editar lojas</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -180,30 +180,6 @@
            <font>
             <pointsize>11</pointsize>
            </font>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="txt_unidade">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="lbl_unidade">
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Unidade</string>
           </property>
          </widget>
         </item>
@@ -306,7 +282,6 @@
   <tabstop>btn_voltar</tabstop>
   <tabstop>txt_codigo</tabstop>
   <tabstop>txt_nome</tabstop>
-  <tabstop>txt_unidade</tabstop>
   <tabstop>btn_salvar</tabstop>
   <tabstop>btn_cancelar</tabstop>
  </tabstops>

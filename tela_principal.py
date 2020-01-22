@@ -9,8 +9,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     switch_tela_cadastro_ingrediente = QtCore.pyqtSignal()
     switch_tela_gerenciar_ingrediente = QtCore.pyqtSignal()
+    
     switch_tela_cadastro_receita = QtCore.pyqtSignal()
     switch_tela_gerenciar_receita = QtCore.pyqtSignal()
+    
+    switch_tela_cadastro_fabricacoes = QtCore.pyqtSignal()
+    switch_tela_gerenciar_fabricacoes = QtCore.pyqtSignal()
+    
+    switch_tela_cadastro_embalagens = QtCore.pyqtSignal()
+    switch_tela_gerenciar_embalagens = QtCore.pyqtSignal()
+    
+    switch_tela_cadastro_compras = QtCore.pyqtSignal()
+    switch_tela_gerenciar_compras = QtCore.pyqtSignal()
+    
+    switch_tela_gerenciar_marcas = QtCore.pyqtSignal()
+    switch_tela_gerenciar_lojas = QtCore.pyqtSignal()
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -30,24 +43,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_vendas_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('vendas'))
         self.btn_vendas_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('vendas'))
 
-        #CONFIG ACTIONS
-        self.action_ingredientes_adicionar.triggered.connect(lambda: self.abrir_tela_adicionar('ingredientes'))
-        self.action_ingredientes_gerenciar.triggered.connect(lambda: self.abrir_tela_gerenciar('ingredientes'))
+        self.btn_embalagens_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('embalagens'))
+        self.btn_embalagens_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('embalagens'))
 
-        self.action_receitas_adicionar.triggered.connect(lambda: self.abrir_tela_adicionar('receitas'))
-        self.action_receitas_gerenciar.triggered.connect(lambda: self.abrir_tela_gerenciar('receitas'))
-
-        self.action_fabricacoes_adicionar.triggered.connect(lambda: self.abrir_tela_adicionar('fabricacoes'))
-        self.action_fabricacoes_gerenciar.triggered.connect(lambda: self.abrir_tela_gerenciar('fabricacoes'))
-
-        self.action_vendas_adicionar.triggered.connect(lambda: self.abrir_tela_adicionar('vendas'))
-        self.action_vendas_gerenciar.triggered.connect(lambda: self.abrir_tela_gerenciar('vendas'))
+        self.btn_compras_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('compras'))
+        self.btn_compras_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('compras'))
+        
+        self.btn_marcas_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('marcas'))
+        self.btn_lojas_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('lojas'))
 
     def abrir_tela_adicionar(self, nomeTela):
         if(nomeTela == 'ingredientes'):
             self.switch_tela_cadastro_ingrediente.emit()
         elif(nomeTela == 'receitas'):
             self.switch_tela_cadastro_receita.emit()
+        elif(nomeTela == 'fabricacoes'):
+            self.switch_tela_cadastro_fabricacoes.emit()
+        elif(nomeTela == 'vendas'):
+            self.switch_tela_cadastro_vendas.emit()
+        elif(nomeTela == 'embalagens'):
+            self.switch_tela_cadastro_embalagens.emit()
+        elif(nomeTela == 'compras'):
+            self.switch_tela_cadastro_compras.emit()
         else:
             print('TROCAR PARA TELA ADICIONAR',str(nomeTela))
     
@@ -56,59 +73,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.switch_tela_gerenciar_ingrediente.emit()
         elif(nomeTela == 'receitas'):
             self.switch_tela_gerenciar_receita.emit()
+        elif(nomeTela == 'fabricacoes'):
+            self.switch_tela_gerenciar_fabricacoes.emit()
+        elif(nomeTela == 'vendas'):
+            self.switch_tela_gerenciar_vendas.emit()
+        elif(nomeTela == 'embalagens'):
+            self.switch_tela_gerenciar_embalagens.emit()
+        elif(nomeTela == 'compras'):
+            self.switch_tela_gerenciar_compras.emit()
+        elif(nomeTela == 'marcas'):
+            self.switch_tela_gerenciar_marcas.emit()
+        elif(nomeTela == 'lojas'):
+            self.switch_tela_gerenciar_lojas.emit()
         else:
             print('TROCAR PARA TELA GERENCIAR',str(nomeTela))
-
-    def txt_to_btn(self, texto):
-        self.addButton.setText(texto)
-    
-    def list_to_btn(self):
-        indexes = self.todoView.selectedIndexes()
-        if indexes:
-            # Indexes is a list of a single item in single-select mode.
-            index = indexes[0]
-            item_data = index.data(0)
-            
-            self.addButton.setText(item_data)
-
-            # Clear the selection (as it is no longer valid).
-            self.todoView.clearSelection()
-    
-    def add(self):
-        """
-        Add an item to our todo list, getting the text from the QLineEdit .todoEdit
-        and then clearing it.
-        """
-        text = self.todoEdit.text()
-        
-        if text: # Don't add empty strings.
-            # Access the list via the model.
-            self.model.todos.append((False, text))
-            # Trigger refresh.        
-            self.model.layoutChanged.emit()
-            # Empty the input
-            self.todoEdit.setText("")
-
-    def delete(self):
-        indexes = self.todoView.selectedIndexes()
-        if indexes:
-            # Indexes is a list of a single item in single-select mode.
-            index = indexes[0]
-            # Remove the item and refresh.
-            del self.model.todos[index.row()]
-            self.model.layoutChanged.emit()
-            # Clear the selection (as it is no longer valid).
-            self.todoView.clearSelection()
-
-    def complete(self):
-        indexes = self.todoView.selectedIndexes()
-        if indexes:
-            index = indexes[0]
-            row = index.row()
-            status, text = self.model.todos[row]
-            self.model.todos[row] = (True, text)
-            # .dataChanged takes top-left and bottom right, which are equal 
-            # for a single selection.
-            self.model.dataChanged.emit(index, index)
-            # Clear the selection (as it is no longer valid).
-            self.todoView.clearSelection()

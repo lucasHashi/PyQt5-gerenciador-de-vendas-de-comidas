@@ -26,6 +26,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_salvar_sair.pressed.connect(self.salvar_sair)
         self.btn_salvar_limpar.pressed.connect(self.salvar_limpar)
 
+        header = self.tb_ingredientes.horizontalHeader() 
+        self.tb_ingredientes.setHorizontalHeaderLabels(['Codigo', 'Ingrediente', 'Quantidade', 'Unidade'])
+        #header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+
         #CARREGAR INGREDIENTES
         #self.carrega_ingredientes()
 
@@ -45,14 +51,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             self.spin_validade.setValue(int(validade))
             self.txt_rendimento.setText(str(rendimento))
-            self.txt_unidade.setText(unidade)
+            self.txt_unidade_receita.setText(unidade)
 
             self.txt_rendimento.setPlaceholderText(str(rendimento))
-            self.txt_unidade.setPlaceholderText(unidade)
+            self.txt_unidade_receita.setPlaceholderText(unidade)
         except:
             self.spin_validade.clear()
             self.txt_rendimento.clear()
-            self.txt_unidade.clear()
+            self.txt_unidade_receita.clear()
 
 
     def carregar_receita_selecionada(self):
@@ -176,17 +182,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             cod_receita, nome_receita = str(self.combo_nomes.currentText()).split(' - ')
             validade = self.spin_validade.value()
             rendimento = self.txt_rendimento.text()
-            unidade = self.txt_unidade.text()
+            unidade_receita = self.txt_unidade_receita.text()
 
             #EXCLUIR TODOS OS INGREDIENTES DA RECEITA
             #PRA DEPOIS ADICIONAR TUDO DO ZERO
             database_receita.zerar_receita(cod_receita)
 
             #ATUALIZAR DADOS DA RECEITA
-            database_receita.update_receita(cod_receita, validade, rendimento, unidade)
+            database_receita.update_receita(cod_receita, validade, rendimento, unidade_receita)
 
             #PARA CADA INGRED EM receita
-            for cod_ingred, nome_ingred, quantidade, unidade in self.receita:
+            for cod_ingred, nome_ingred, quantidade, unidade_ingred in self.receita:
                 #ADICIONAR INGRED NA TABELA DE LIGACAO COM O cod_receita
                 database_receita.insere_ingred_receita(cod_receita, cod_ingred, quantidade)
 
@@ -215,7 +221,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def ativar_receita(self):
         self.combo_nomes.setEnabled(False)
         self.txt_rendimento.setEnabled(False)
-        self.txt_unidade.setEnabled(False)
+        self.txt_unidade_receita.setEnabled(False)
         self.spin_validade.setEnabled(False)
 
         self.btn_adicionar.setEnabled(True)
@@ -231,7 +237,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def desativar_receita(self):
         self.combo_nomes.setEnabled(True)
         self.txt_rendimento.setEnabled(True)
-        self.txt_unidade.setEnabled(True)
+        self.txt_unidade_receita.setEnabled(True)
         self.spin_validade.setEnabled(True)
 
         self.btn_adicionar.setEnabled(False)
@@ -246,7 +252,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def recomecar(self):
         self.txt_rendimento.clear()
-        self.txt_unidade.clear()
+        self.txt_unidade_receita.clear()
         self.btn_iniciar.setText('Iniciar')
 
         self.txt_ingrediente.clear()

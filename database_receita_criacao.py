@@ -49,27 +49,28 @@ def criar_tabelas():
                 id_loja_embala INTEGER PRIMARY KEY,
                 preco REAL,
                 id_loja_loja_embala INTEGER,
-                id_ingrediente_loja_embala INTEGER,
+                id_embalagem_loja_embala INTEGER,
                 FOREIGN KEY (id_loja_loja_embala) REFERENCES lojas (id_lojas),
-                FOREIGN KEY (id_ingrediente_loja_embala) REFERENCES ingredientes (id_ingrediente)
+                FOREIGN KEY (id_embalagem_loja_embala) REFERENCES emabalagens (id_embalagem)
             )''')
 
         #TABELA COMPRAS
         cursor.execute('''
             CREATE TABLE compras (
                 id_compra INTEGER PRIMARY KEY,
-                nome TEXT
+                data TEXT
             )''')
         
-        #TABELA COMP_LOJA
+        #TABELA COMP_LOJA_EMBALA
         cursor.execute('''
-            CREATE TABLE comp_loja (
-                id_comp_loja INTEGER PRIMARY KEY,
+            CREATE TABLE comp_loja_embala (
+                id_comp_loja_embala INTEGER PRIMARY KEY,
                 preco REAL,
-                id_compra_comp_loja INTEGER,
-                id_loja_embala_comp_loja INTEGER,
-                FOREIGN KEY (id_compra_comp_loja) REFERENCES compras (id_compra),
-                FOREIGN KEY (id_loja_embala_comp_loja) REFERENCES loja_embala (id_loja_embala)
+                quantidade REAL,
+                id_compra_comp_loja_embala INTEGER,
+                id_loja_embala_comp_loja_embala INTEGER,
+                FOREIGN KEY (id_compra_comp_loja_embala) REFERENCES compras (id_compra),
+                FOREIGN KEY (id_loja_embala_comp_loja_embala) REFERENCES loja_embala (id_loja_embala)
             )''')
 
         #TABELA RECEITAS
@@ -98,6 +99,7 @@ def criar_tabelas():
             CREATE TABLE fabricacoes (
                 id_fabricacao INTEGER PRIMARY KEY,
                 data TEXT,
+                custo_total REAL,
                 rendimento REAL,
                 tempo_minutos INTEGER,
                 id_receita_fabricacoes INTEGER,
@@ -110,6 +112,7 @@ def criar_tabelas():
                 id_venda INTEGER PRIMARY KEY,
                 data TEXT,
                 local TEXT,
+                retorno REAL,
                 pacote_preco REAL,
                 pacote_tam REAL,
                 quant_pacotes INTEGER,

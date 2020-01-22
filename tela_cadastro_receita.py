@@ -128,15 +128,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             nome_receita = self.txt_nome.text()
             validade = self.spin_validade.value()
             rendimento = self.txt_rendimento.text()
-            unidade = self.txt_unidade.text()
+            unidade_receita = self.txt_unidade_receita.text()
 
             #ADICIONAR RECEITA
-            cod_receita = database_receita.insere_receita(nome_receita, validade, rendimento, unidade)
+            cod_receita = database_receita.insere_receita(nome_receita, validade, rendimento, unidade_receita)
             #PEGAR O CODIGO DA ULTIMA RECEITA ADICIONADA
             #cod_receita = database_receita.cod_ultimo_insert()
 
             #PARA CADA INGRED EM receita
-            for cod_ingred, nome_ingred, quantidade, unidade in self.receita:
+            for cod_ingred, nome_ingred, quantidade, unidade_ingred in self.receita:
                 #ADICIONAR INGRED NA TABELA DE LIGACAO COM O cod_receita
                 database_receita.insere_ingred_receita(cod_receita, cod_ingred, quantidade)
 
@@ -159,7 +159,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def ativar_receita(self):
         self.txt_nome.setEnabled(False)
         self.txt_rendimento.setEnabled(False)
-        self.txt_unidade.setEnabled(False)
+        self.txt_unidade_receita.setEnabled(False)
         self.spin_validade.setEnabled(False)
 
         self.btn_adicionar.setEnabled(True)
@@ -175,7 +175,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def desativar_receita(self):
         self.txt_nome.setEnabled(True)
         self.txt_rendimento.setEnabled(True)
-        self.txt_unidade.setEnabled(True)
+        self.txt_unidade_receita.setEnabled(True)
         self.spin_validade.setEnabled(True)
 
         self.btn_adicionar.setEnabled(False)
@@ -191,7 +191,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def recomecar(self):
         self.txt_nome.clear()
         self.txt_rendimento.clear()
-        self.txt_unidade.clear()
+        self.txt_unidade_receita.clear()
 
         self.txt_ingrediente.clear()
         self.txt_quantidade.clear()
