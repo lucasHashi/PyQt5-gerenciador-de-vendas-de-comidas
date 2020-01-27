@@ -8,17 +8,18 @@ import tela_gerenciar_ingrediente
 import tela_cadastro_receita
 import tela_gerenciar_receita
 
-
 import tela_cadastro_embalagem
 #import tela_gerenciar_embalagem
 
-'''
+import tela_cadastro_loja_embala
+import tela_gerenciar_loja_embala
+
 import tela_cadastro_compra
-import tela_gerenciar_compra
+#import tela_gerenciar_compra
 
-import tela_cadastro_fabricacao
-import tela_gerenciar_fabricacao
-
+#import tela_cadastro_fabricacao
+#import tela_gerenciar_fabricacao
+'''
 import tela_cadastro_venda
 import tela_gerenciar_venda
 
@@ -36,6 +37,8 @@ class Controller:
         self.janela_tela_principal.switch_tela_cadastro_ingrediente.connect(self.abre_tela_cadastro_ingrediente)
         self.janela_tela_principal.switch_tela_cadastro_receita.connect(self.abre_tela_cadastro_receita)
         self.janela_tela_principal.switch_tela_cadastro_embalagens.connect(self.abre_tela_cadastro_embalagens)
+        self.janela_tela_principal.switch_tela_cadastro_loja_embala.connect(self.abre_tela_cadastro_loja_embala)
+        self.janela_tela_principal.switch_tela_cadastro_compras.connect(self.abre_tela_cadastro_compras)
 
         self.janela_tela_principal.switch_tela_gerenciar_ingrediente.connect(self.abre_tela_gerenciar_ingrediente)
         self.janela_tela_principal.switch_tela_gerenciar_receita.connect(self.abre_tela_gerenciar_receita)
@@ -64,6 +67,21 @@ class Controller:
     def abre_tela_gerenciar_embalagens(self):
         self.janela_tela_gerenciar_embalagens = tela_gerenciar_embalagem.MainWindow()
         self.janela_tela_gerenciar_embalagens.show()
+    
+    def abre_tela_cadastro_loja_embala(self):
+        self.janela_tela_cadastro_loja_embala = tela_cadastro_loja_embala.MainWindow()
+        self.janela_tela_cadastro_loja_embala.show()
+        self.janela_tela_cadastro_loja_embala.switch_tela_gerenciar_loja_embala.connect(self.abre_tela_gerenciar_loja_embala)
+        try:
+            self.janela_tela_gerenciar_loja_embala.close()
+        except:
+            pass
+    
+    def abre_tela_gerenciar_loja_embala(self, id_loja_embala, id_embalagem, tamanho, unidade, marca, id_loja, nome_loja, preco, ingrediente):
+        self.janela_tela_gerenciar_loja_embala = tela_gerenciar_loja_embala.MainWindow(id_loja_embala, id_embalagem, tamanho, unidade, marca, id_loja, nome_loja, preco, ingrediente)
+        self.janela_tela_gerenciar_loja_embala.show()
+        self.janela_tela_gerenciar_loja_embala.switch_tela_cadastro_loja_embala.connect(self.abre_tela_cadastro_loja_embala)
+        self.janela_tela_cadastro_loja_embala.close()
     
     def abre_tela_cadastro_compras(self):
         self.janela_tela_cadastro_compras = tela_cadastro_compra.MainWindow()

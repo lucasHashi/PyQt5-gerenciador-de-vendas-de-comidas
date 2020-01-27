@@ -326,12 +326,22 @@
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QLineEdit" name="txt_unidade_ingred">
                 <property name="enabled">
                  <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                 </font>
                 </property>
                </widget>
               </item>

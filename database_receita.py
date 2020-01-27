@@ -65,7 +65,7 @@ def insere_loja_embala(preco, id_loja, id_embalagem):
         cursor = conexao.cursor()
         
         cursor.execute('''INSERT INTO loja_embala(preco, id_loja_loja_embala, id_embalagem_loja_embala) 
-                            VALUES(:preco,:loja,:embalagem)''',
+                            VALUES(:preco, :loja, :embalagem)''',
                             {'preco':preco, 'loja':id_loja, 'embalagem':id_embalagem})
 
         cursor.execute('select last_insert_rowid()')
@@ -73,13 +73,13 @@ def insere_loja_embala(preco, id_loja, id_embalagem):
 
         return ultimo_id
 
-def insere_comp_loja_embala(preco, quantidade, id_loja, id_loja_embalagem):
+def insere_comp_loja_embala(preco, quantidade, id_compra, id_loja_embalagem):
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
-        cursor.execute('''INSERT INTO comp_loja(preco, quantidade, id_compra_comp_loja_embala, id_loja_embala_comp_loja_embala) 
-                            VALUES(:preco, :quant, :loja, :loja_embala)''',
-                            {'preco':preco, 'quant': quantidade, 'loja':id_loja, 'loja_embala':id_loja_embalagem})
+        cursor.execute('''INSERT INTO comp_loja_embala(preco, quantidade, id_compra_comp_loja_embala, id_loja_embala_comp_loja_embala) 
+                            VALUES(:preco, :quant, :compra, :loja_embala)''',
+                            {'preco':preco, 'quant': quantidade, 'compra':id_compra, 'loja_embala':id_loja_embalagem})
 
         cursor.execute('select last_insert_rowid()')
         ultimo_id = cursor.fetchone()[0]
@@ -216,6 +216,24 @@ def select_receitas_lista():
 
         return lista_receitas
 
+def select_loja_embala_lista():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('''SELECT le.id_loja_embala, e.tamanho, 
+                            i.unidade, m.nome, l.nome, le.preco 
+                            FROM marcas m, ingredientes i, lojas l,
+                            embalagens e, loja_embala le
+                            WHERE le.id_embalagem_loja_embala = e.id_embalagem AND 
+                            e.id_marca_embalagens = m.id_marca AND 
+                            e.id_ingrediente_embalagens = i.id_ingrediente AND 
+                            le.id_loja_loja_embala = l.id_loja
+                            ''')
+        
+        lista_loja_embala = cursor.fetchall()
+
+        return lista_loja_embala
+
 def select_lojas_lista():
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
@@ -225,19 +243,6 @@ def select_lojas_lista():
         lista_lojas = cursor.fetchall()
 
         return lista_lojas
-
-
-#SELECT_TABLE_POR_FILTRO
-def select_marca_por_nome(nomeMarca):
-    nomeMarca = nomeMarca.lower()
-    with sqlite3.connect(nome_database+'.db') as conexao:
-        cursor = conexao.cursor()
-
-        cursor.execute('SELECT id_marca FROM marcas WHERE nome = :nome', {'nome': nomeMarca})
-        
-        id_marca = cursor.fetchall()[0][0]
-
-        return id_marca
 
 
 #UPDATE_TABLE
@@ -257,6 +262,12 @@ def update_receita(id_receita, validade, rendimento, unidade):
         cursor = conexao.cursor()
         
         cursor.execute('UPDATE receitas SET validade = ?, rendimento = ?, unidade = ? WHERE id_receita = ?', [validade, rendimento, unidade, id_receita])
+
+def update_loja_embala(id_loja_embala, preco):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('UPDATE loja_embala SET preco = ? WHERE id_loja_embala = ?', [preco, id_loja_embala])
 
 def update_loja(id_loja, nome):
     nome = nome.lower()
@@ -347,10 +358,91 @@ def zerar_receita(id_receita):
 
         cursor.execute('DELETE FROM ingred_receita WHERE id_receita_ingred_receita = :id', {'id': id_receita})
 
+def select_loja_embala_por_id(id_loja_embala):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT * FROM loja_embala WHERE id_loja_embala = :id', {'id': id_loja_embala})
+        
+        loja_embala = cursor.fetchall()[0]
+
+        return loja_embala
+
+def select_loja_embala_por_ingrediente_lista(id_ingrediente):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('''SELECT le.id_loja_embala, e.tamanho, 
+                            i.unidade, m.nome, l.nome, le.preco 
+                            FROM marcas m, ingredientes i, lojas l,
+                            embalagens e, loja_embala le
+                            WHERE le.id_embalagem_loja_embala = e.id_embalagem AND 
+                            e.id_marca_embalagens = m.id_marca AND 
+                            e.id_ingrediente_embalagens = i.id_ingrediente AND 
+                            i.id_ingrediente = :id_ingred AND 
+                            le.id_loja_loja_embala = l.id_loja
+                            ''',
+                            {'id_ingred': id_ingrediente})
+        
+        lista_loja_embala = cursor.fetchall()
+
+        return lista_loja_embala
 
 
+def select_marca_por_nome(nomeMarca):
+    nomeMarca = nomeMarca.lower()
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
 
+        cursor.execute('SELECT id_marca FROM marcas WHERE nome = :nome', {'nome': nomeMarca})
+        
+        id_marca = cursor.fetchall()[0][0]
 
+        return id_marca
+
+def select_loja_embala_por_ingrediente_loja_nomes(id_loja, id_ingrediente):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('''SELECT le.id_loja_embala, e.id_marca_embalagens, 
+                            m.nome, e.tamanho, i.unidade, le.preco
+                            FROM loja_embala le, marcas m, ingredientes i, embalagens e 
+                            WHERE e.id_ingrediente_embalagens = :id_ingred 
+                            AND e.id_ingrediente_embalagens = i.id_ingrediente 
+                            AND e.id_marca_embalagens = m.id_marca 
+                            AND e.id_embalagens = le.id_embalagem_loja_embala 
+                            AND le.id_loja_loja_embala = :id_loja''',
+                            {'id_ingred': id_ingrediente, 'id_loja': id_loja})
+        
+        lista_embalagens = cursor.fetchall()
+        lista_embalagens_str = []
+        
+        for linha in lista_embalagens:
+            embalagem = '{} - {} - {} - {} - {} - {}'.format(linha[0], linha[1], linha[2], linha[3], linha[4], linha[5])
+            lista_embalagens_str.append(embalagem)
+
+        return lista_embalagens_str
+
+def select_embalagens_por_ingrediente_nomes(id_ingrediente):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('''SELECT e.id_embalagem, e.tamanho,
+                            i.unidade, m.nome 
+                            FROM embalagens e, marcas m, ingredientes i
+                            WHERE e.id_ingrediente_embalagens = :id_ingred AND
+                            e.id_ingrediente_embalagens = i.id_ingrediente AND
+                            e.id_marca_embalagens = m.id_marca''',
+                            {'id_ingred': id_ingrediente})
+        
+        lista_embalagens = cursor.fetchall()
+        lista_embalagens_str = []
+        
+        for linha in lista_embalagens:
+            embalagem = '{} - {} - {} - {}'.format(linha[0], linha[1], linha[2], linha[3])
+            lista_embalagens_str.append(embalagem)
+
+        return lista_embalagens_str
 
 
 

@@ -28,7 +28,7 @@ def criar_tabelas():
         #TABELA EMBALAGENS
         cursor.execute('''
             CREATE TABLE embalagens (
-                id_embalagens INTEGER PRIMARY KEY,
+                id_embalagem INTEGER PRIMARY KEY,
                 tamanho REAL,
                 id_ingrediente_embalagens INTEGER,
                 id_marca_embalagens INTEGER,
@@ -39,7 +39,7 @@ def criar_tabelas():
         #TABELA LOJAS
         cursor.execute('''
             CREATE TABLE lojas (
-                id_lojas INTEGER PRIMARY KEY,
+                id_loja INTEGER PRIMARY KEY,
                 nome TEXT
             )''')
         

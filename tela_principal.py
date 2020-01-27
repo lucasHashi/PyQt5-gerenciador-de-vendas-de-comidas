@@ -16,8 +16,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     switch_tela_cadastro_fabricacoes = QtCore.pyqtSignal()
     switch_tela_gerenciar_fabricacoes = QtCore.pyqtSignal()
     
+    switch_tela_cadastro_vendas = QtCore.pyqtSignal()
+    switch_tela_gerenciar_vendas = QtCore.pyqtSignal()
+    
     switch_tela_cadastro_embalagens = QtCore.pyqtSignal()
     switch_tela_gerenciar_embalagens = QtCore.pyqtSignal()
+
+    switch_tela_cadastro_loja_embala = QtCore.pyqtSignal()
     
     switch_tela_cadastro_compras = QtCore.pyqtSignal()
     switch_tela_gerenciar_compras = QtCore.pyqtSignal()
@@ -46,6 +51,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_embalagens_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('embalagens'))
         self.btn_embalagens_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('embalagens'))
 
+        self.btn_loja_embala_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('loja_embala'))
+
         self.btn_compras_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('compras'))
         self.btn_compras_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('compras'))
         
@@ -63,6 +70,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.switch_tela_cadastro_vendas.emit()
         elif(nomeTela == 'embalagens'):
             self.switch_tela_cadastro_embalagens.emit()
+        elif(nomeTela == 'loja_embala'):
+            self.switch_tela_cadastro_loja_embala.emit()
         elif(nomeTela == 'compras'):
             self.switch_tela_cadastro_compras.emit()
         else:
