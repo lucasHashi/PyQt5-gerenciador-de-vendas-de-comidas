@@ -11,7 +11,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        
+    
         #INICIA LISTA DE COMPRA
         #LISTA COM LISTAS = [id_loja_embala, ingred, marca, tamanho, unidade, preco, quantidade, custo_final]
         self.lista_compra = []
@@ -26,8 +26,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_cad_sair.pressed.connect(self.cadastrar_voltar)
         self.btn_cad_limpar.pressed.connect(self.cadastrar_limpar)
 
+        #CARREGAR LOJAS
+        self.carrega_combo_lojas()
+
+        #CARREGAR INGREDIENTES
+        #self.carrega_combo_ingredientes()
+
+        #QUANDO UM INGREDIENTE FOR SELECIONADO
+        self.combo_ingrediente.currentIndexChanged.connect(self.combo_ingrediente_selecionado)
+
         #CARREGAR EMBALAGENS
-        self.carrega_embalagens()
+        #self.carrega_embalagens()
 
         #QUANDO UM ITEM FOR DOUBLE-CLICADO
         self.list_embalagens.itemDoubleClicked.connect(self.embalagem_selecionada)
@@ -43,6 +52,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #header.setSectionResizeMode(6, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(7, QtWidgets.QHeaderView.ResizeToContents)
     
+    def combo_ingrediente_selecionado(self):
+        if(not self.combo_ingrediente.currentText() == 'Ingredientes cadastrados'):
+            self.carrega_embalagens()
+            self.list_embalagens.setEnabled(True)
+        else:
+            self.list_embalagens.clear()
+            self.list_embalagens.setEnabled(False)
+
     def carrega_embalagens(self):
         self.list_embalagens.clear()
         id_loja = self.combo_loja.currentText().split(' - ')[0]
@@ -67,17 +84,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def carrega_produtos_compra(self):
         if(self.lista_compra):
             self.tb_produtos.setRowCount(0)
-            for linha in range(len(self.reclista_compraeita)):
+            for linha in range(len(self.lista_compra)):
                 self.tb_produtos.insertRow(linha)
                 for coluna in range(len(self.lista_compra[0])):
-                    self.tb_produtos.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(self.receita[linha][coluna])))
+                    self.tb_produtos.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(self.lista_compra[linha][coluna])))
         else:
             self.tb_produtos.clear()
 
     def adicionar_produto(self):
         if(str(self.txt_produto.text()) and int(self.spin_quantidade.value()) > 0):
             #ADICIONAR PRODUTO NA TABELA
-            id_loja_embala, marca, tamanho, unidade, preco = str(self.txt_produto.text()).split(' - ')
+            marca, tamanho, unidade, preco, id_loja_embala, _ = str(self.txt_produto.text()).split(' - ')
             quantidade = self.spin_quantidade.value()
             ingred = self.combo_ingrediente.currentText().split(' - ')[1]
 
@@ -123,6 +140,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.txt_produto.clear()
             self.txt_quantidade.setValue(0)
         except:
+            print('erro aqui')
             pass
 
     def cadastrar_voltar(self):
@@ -144,20 +162,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         id_compra = database_receita.insere_compra('{}-{}-{}'.format(data_ano, data_mes, data_dia))
 
         #PARA CADA PRODUTO EM lista_compra
-        for id_loja_embala, ingred, marca, tamanho, unidade, preco, quantidade, custo_final in self.lista_compra:
+        for id_loja_embala, _, _, _, _, preco, quantidade, _ in self.lista_compra:
             #ADICIONAR INGRED NA TABELA DE LIGACAO COM O cod_receita
             database_receita.insere_comp_loja_embala(preco, quantidade, id_compra, id_loja_embala)
-
-    def carrega_combo_marcas(self):
-        self.combo_marca.clear()
-        marcas = database_receita.select_marcas_nomes()
-        self.combo_marca.addItems(marcas)
+    
+    def carrega_combo_lojas(self):
+        self.combo_loja.clear()
+        lojas = ['Lojas cadastradas']
+        lojas += database_receita.select_lojas_nomes()
+        self.combo_loja.addItems(lojas)
+    
+    def carrega_combo_ingredientes(self):
+        self.combo_ingrediente.clear()
+        ingredientes = ['Ingredientes cadastrados']
+        id_loja = self.combo_loja.currentText().split(' - ')[0]
+        ingredientes += database_receita.select_ingredientes_de_loja(id_loja)
+        self.combo_ingrediente.addItems(ingredientes)
 
     def fechar_tela(self):
         self.close()
 
     def iniciar_compra(self):
-        if(self.date_data.isEnabled() and self.combo_loja.currentText() == 'Lojas cadastradas'):
+        if(self.date_data.isEnabled() and not self.combo_loja.currentText() == 'Lojas cadastradas'):
             self.ativar_compra()
             self.btn_iniciar.setText('Editar')
         else:
@@ -172,6 +198,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_remover.setEnabled(True)
 
         self.combo_ingrediente.setEnabled(True)
+        self.carrega_combo_ingredientes()
         self.spin_quantidade.setEnabled(True)
 
         self.list_embalagens.setEnabled(True)
@@ -185,9 +212,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_remover.setEnabled(False)
 
         self.combo_ingrediente.setEnabled(False)
+        self.combo_ingrediente.clear()
         self.spin_quantidade.setEnabled(False)
 
         self.list_embalagens.setEnabled(False)
+        self.list_embalagens.clear()
         self.tb_produtos.setEnabled(False)
 
     def recomecar(self):

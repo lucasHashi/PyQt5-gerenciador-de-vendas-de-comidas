@@ -351,11 +351,15 @@
            <number>3</number>
           </property>
           <property name="columnCount">
-           <number>4</number>
+           <number>8</number>
           </property>
           <row/>
           <row/>
           <row/>
+          <column/>
+          <column/>
+          <column/>
+          <column/>
           <column/>
           <column/>
           <column/>

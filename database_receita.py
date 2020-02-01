@@ -352,6 +352,29 @@ def select_ingredientes_de_receita(id_receita):
 
         return lista_ingredientes_receita
 
+def select_ingredientes_de_loja(id_loja):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        #id_ingrediente, ingrediente, quantidade, unidade
+        cursor.execute('''SELECT DISTINCT i.id_ingrediente, i.nome, i.unidade
+                            FROM ingredientes i, lojas l, loja_embala le, embalagens e
+                            WHERE ? = l.id_loja AND 
+                            l.id_loja = le.id_loja_loja_embala AND 
+                            le.id_embalagem_loja_embala = e.id_embalagem AND 
+                            e.id_ingrediente_embalagens = i.id_ingrediente
+                            ''', 
+                            [id_loja])
+        
+        lista_ingredientes_receita = cursor.fetchall()
+        lista_ingredientes_str = []
+        
+        for linha in lista_ingredientes_receita:
+            ingred = '{} - {} - {}'.format(linha[0], linha[1], linha[2])
+            lista_ingredientes_str.append(ingred)
+
+        return lista_ingredientes_str
+
+
 def zerar_receita(id_receita):
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
@@ -407,10 +430,10 @@ def select_loja_embala_por_ingrediente_loja_nomes(id_loja, id_ingrediente):
         cursor.execute('''SELECT le.id_loja_embala, e.id_marca_embalagens, 
                             m.nome, e.tamanho, i.unidade, le.preco
                             FROM loja_embala le, marcas m, ingredientes i, embalagens e 
-                            WHERE e.id_ingrediente_embalagens = :id_ingred 
+                            WHERE i.id_ingrediente = :id_ingred 
                             AND e.id_ingrediente_embalagens = i.id_ingrediente 
                             AND e.id_marca_embalagens = m.id_marca 
-                            AND e.id_embalagens = le.id_embalagem_loja_embala 
+                            AND le.id_embalagem_loja_embala = e.id_embalagem
                             AND le.id_loja_loja_embala = :id_loja''',
                             {'id_ingred': id_ingrediente, 'id_loja': id_loja})
         
@@ -446,7 +469,7 @@ def select_embalagens_por_ingrediente_nomes(id_ingrediente):
 
 
 
-
+select_ingredientes_de_loja('2')
 
 
 
