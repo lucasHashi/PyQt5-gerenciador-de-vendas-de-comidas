@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1286</width>
+    <width>1328</width>
     <height>759</height>
    </rect>
   </property>
@@ -59,6 +59,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QDateEdit" name="date_data">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -85,6 +88,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="4,3">
             <item>
              <widget class="QLineEdit" name="txt_rendimento">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="font">
                <font>
                 <pointsize>11</pointsize>
@@ -135,10 +141,16 @@
            <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="5,3">
             <item>
              <widget class="QSpinBox" name="spin_tempo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="font">
                <font>
                 <pointsize>11</pointsize>
                </font>
+              </property>
+              <property name="maximum">
+               <number>999</number>
               </property>
              </widget>
             </item>
@@ -160,6 +172,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="btn_iniciar">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -242,6 +257,14 @@
           </item>
           <item>
            <widget class="QTableWidget" name="tb_ingredientes">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="rowCount">
              <number>3</number>
             </property>
@@ -311,6 +334,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="btn_cancelar">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -330,16 +356,26 @@
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tb_custos">
+         <widget class="QTableWidget" name="tb_embalagens">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
           <property name="rowCount">
            <number>3</number>
           </property>
           <property name="columnCount">
-           <number>4</number>
+           <number>6</number>
           </property>
           <row/>
           <row/>
           <row/>
+          <column/>
+          <column/>
           <column/>
           <column/>
           <column/>
@@ -355,7 +391,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="4,8">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,2,1,2,1,3">
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="4,5">
           <item>
            <widget class="QLabel" name="lbl_custo_final">
             <property name="font">
@@ -373,50 +409,6 @@
           </item>
           <item>
            <widget class="QLineEdit" name="txt_custo_final">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lbl_igual">
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>=</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txt_custo_por_unidade">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lbl_barra">
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>/</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txt_unidade_custo">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -448,6 +440,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QPushButton" name="btn_cad_limpar">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -466,6 +461,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="btn_cad_sair">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -484,6 +482,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="btn_recomecar">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -502,6 +503,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="btn_voltar">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -535,10 +539,8 @@
   <tabstop>tb_ingredientes</tabstop>
   <tabstop>txt_ingrediente</tabstop>
   <tabstop>btn_cancelar</tabstop>
-  <tabstop>tb_custos</tabstop>
+  <tabstop>tb_embalagens</tabstop>
   <tabstop>txt_custo_final</tabstop>
-  <tabstop>txt_custo_por_unidade</tabstop>
-  <tabstop>txt_unidade_custo</tabstop>
   <tabstop>btn_cad_limpar</tabstop>
   <tabstop>btn_cad_sair</tabstop>
   <tabstop>btn_recomecar</tabstop>

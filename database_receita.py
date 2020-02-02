@@ -164,6 +164,21 @@ def select_ingredientes_nomes():
 
         return lista_ingredientes_str
 
+def select_receitas_nomes():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT DISTINCT id_receita, nome, rendimento, unidade FROM receitas')
+        
+        lista_receitas = cursor.fetchall()
+        lista_receitas_str = []
+        
+        for linha in lista_receitas:
+            receita = '{} - {} - {} - {}'.format(linha[0], linha[1], linha[2], linha[3])
+            lista_receitas_str.append(receita)
+
+        return lista_receitas_str
+
 def select_lojas_nomes():
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
@@ -467,9 +482,6 @@ def select_embalagens_por_ingrediente_nomes(id_ingrediente):
 
         return lista_embalagens_str
 
-
-
-select_ingredientes_de_loja('2')
 
 
 

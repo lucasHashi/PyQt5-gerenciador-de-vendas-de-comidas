@@ -17,15 +17,14 @@ import tela_gerenciar_loja_embala
 import tela_cadastro_compra
 #import tela_gerenciar_compra
 
-#import tela_cadastro_fabricacao
+import tela_cadastro_fabricacao
 #import tela_gerenciar_fabricacao
-'''
-import tela_cadastro_venda
-import tela_gerenciar_venda
 
-import tela_gerenciar_marca
-import tela_gerenciar_loja
-'''
+#import tela_cadastro_venda
+#import tela_gerenciar_venda
+
+#import tela_gerenciar_marca
+#import tela_gerenciar_loja
 
 class Controller:
 
@@ -38,6 +37,7 @@ class Controller:
         self.janela_tela_principal.switch_tela_cadastro_receita.connect(self.abre_tela_cadastro_receita)
         self.janela_tela_principal.switch_tela_cadastro_embalagens.connect(self.abre_tela_cadastro_embalagens)
         self.janela_tela_principal.switch_tela_cadastro_loja_embala.connect(self.abre_tela_cadastro_loja_embala)
+        self.janela_tela_principal.switch_tela_cadastro_fabricacoes.connect(self.abre_tela_cadastro_fabricacoes)
         self.janela_tela_principal.switch_tela_cadastro_compras.connect(self.abre_tela_cadastro_compras)
 
         self.janela_tela_principal.switch_tela_gerenciar_ingrediente.connect(self.abre_tela_gerenciar_ingrediente)

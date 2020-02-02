@@ -51,6 +51,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         header.setSectionResizeMode(5, QtWidgets.QHeaderView.ResizeToContents)
         #header.setSectionResizeMode(6, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(7, QtWidgets.QHeaderView.ResizeToContents)
+
+        #COLOCA DIA DE HOJE PRO CAMPO DATA
+        self.date_data.setDate(QtCore.QDate.currentDate())
     
     def combo_ingrediente_selecionado(self):
         if(not self.combo_ingrediente.currentText() == 'Ingredientes cadastrados'):
