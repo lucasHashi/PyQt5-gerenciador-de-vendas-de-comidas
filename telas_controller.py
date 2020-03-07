@@ -20,11 +20,13 @@ import tela_cadastro_compra
 import tela_cadastro_fabricacao
 #import tela_gerenciar_fabricacao
 
-#import tela_cadastro_venda
+import tela_cadastro_venda
 #import tela_gerenciar_venda
 
 #import tela_gerenciar_marca
 #import tela_gerenciar_loja
+
+import tela_resumo_geral
 
 class Controller:
 
@@ -39,9 +41,13 @@ class Controller:
         self.janela_tela_principal.switch_tela_cadastro_loja_embala.connect(self.abre_tela_cadastro_loja_embala)
         self.janela_tela_principal.switch_tela_cadastro_fabricacoes.connect(self.abre_tela_cadastro_fabricacoes)
         self.janela_tela_principal.switch_tela_cadastro_compras.connect(self.abre_tela_cadastro_compras)
+        self.janela_tela_principal.switch_tela_cadastro_vendas.connect(self.abre_tela_cadastro_vendas)
 
         self.janela_tela_principal.switch_tela_gerenciar_ingrediente.connect(self.abre_tela_gerenciar_ingrediente)
         self.janela_tela_principal.switch_tela_gerenciar_receita.connect(self.abre_tela_gerenciar_receita)
+
+        self.janela_tela_principal.switch_tela_resumo_geral.connect(self.abre_tela_resumo_geral)
+
         self.janela_tela_principal.show()
 
     def abre_tela_cadastro_ingrediente(self):
@@ -114,6 +120,10 @@ class Controller:
     def abre_tela_gerenciar_lojas(self):
         self.janela_tela_gerenciar_lojas = tela_gerenciar_loja.MainWindow()
         self.janela_tela_gerenciar_lojas.show()
+    
+    def abre_tela_resumo_geral(self):
+        self.abre_tela_resumo_geral = tela_resumo_geral.MainWindow()
+        self.abre_tela_resumo_geral.show()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

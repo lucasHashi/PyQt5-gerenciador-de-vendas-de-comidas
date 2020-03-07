@@ -112,10 +112,10 @@ def criar_tabelas():
                 id_venda INTEGER PRIMARY KEY,
                 data TEXT,
                 local TEXT,
-                retorno REAL,
-                pacote_preco REAL,
-                pacote_tam REAL,
-                quant_pacotes INTEGER,
+                retorno REAL DEFAULT 0,
+                pacote_preco REAL DEFAULT 0,
+                pacote_tam REAL DEFAULT 0,
+                quant_pacotes INTEGER DEFAULT 0,
                 id_fabricacao_vendas INTEGER,
                 FOREIGN KEY (id_fabricacao_vendas) REFERENCES fabricacoes (id_fabricacao)
             )''')

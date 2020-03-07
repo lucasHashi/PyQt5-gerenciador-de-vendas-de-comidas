@@ -179,7 +179,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.tb_embalagens.setItem(linha,5, QtWidgets.QTableWidgetItem(str(lista_embalagens_ingrediente[linha][4])))
 
     def embalagem_ingrediente_selecionada(self, linha, coluna):
-        print(self.itens_na_receita)
         #ADICIONAR A LISTA DE ITENS DA RECEITA [... TAMANHO, CUSTO, GASTO]
         tamanho = self.tb_embalagens.item(linha, 1).text()
         preco = self.tb_embalagens.item(linha, 4).text()
@@ -190,9 +189,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         id_ingrediente = self.txt_ingrediente.text().split(' - ')[0]
         for i in range(len(self.itens_na_receita)):
             item = self.itens_na_receita[i]
-            print(item[0], id_ingrediente)
             if(str(item[0]) == str(id_ingrediente)):
-                print(tamanho, preco, gasto)
                 self.itens_na_receita[i][4] = tamanho
                 self.itens_na_receita[i][5] = preco
                 self.itens_na_receita[i][6] = gasto
@@ -205,8 +202,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tb_embalagens.setEnabled(False)
         self.tb_embalagens.clearContents()
         self.btn_cancelar.setEnabled(False)
-
-        print(self.itens_na_receita)
 
     def cancelar_ingrediente(self):
         self.txt_ingrediente.clear()
@@ -255,7 +250,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             custo_total = float(self.txt_custo_final.text())
 
             #INSERE DADOS TABELA FABRICACOES
-            print(data, custo_total, rendimento, tempo_minutos, id_receita)
             database_receita.insere_fabricacao(data, custo_total, rendimento, tempo_minutos, id_receita)
 
             self.recomecar()

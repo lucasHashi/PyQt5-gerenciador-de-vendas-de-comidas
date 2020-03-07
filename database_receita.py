@@ -100,6 +100,8 @@ def insere_fabricacao(data, custo_total, rendimento, tempo, id_receita):
         return ultimo_id
 
 def insere_venda(data, local, retorno, pacote_tamanho, pacote_preco, quant_pacotes, id_fabricacao):
+    local = local.lower()
+
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
@@ -194,6 +196,28 @@ def select_lojas_nomes():
 
         return lista_lojas_str
 
+def select_fabricacoes_nao_vendidas_nomes(id_receita):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('''SELECT DISTINCT f.id_fabricacao, f.data
+                            FROM fabricacoes f, receitas r
+                            WHERE NOT id_fabricacao IN 
+                            (SELECT id_fabricacao_vendas FROM vendas) 
+                            AND f.id_receita_fabricacoes = r.id_receita 
+                            AND r.id_receita = :id_receita
+                            ''',
+                            {'id_receita': id_receita})
+        
+        lista_fabricacoes = cursor.fetchall()
+        lista_fabricacoes_str = []
+        
+        for linha in lista_fabricacoes:
+            fabricacao = '{} - {}'.format(linha[0], linha[1])
+            lista_fabricacoes_str.append(fabricacao)
+
+        return lista_fabricacoes_str
+
 def select_marcas_nomes():
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
@@ -209,6 +233,19 @@ def select_marcas_nomes():
 
         return lista_marcas_str
 
+def select_locais_nomes():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT DISTINCT local FROM vendas')
+        
+        lista_locais = cursor.fetchall()
+        lista_locais_str = []
+        
+        for linha in lista_locais:
+            lista_locais_str.append(str(linha[0]))
+
+        return lista_locais_str
 
 #SELECT_TABLE_LISTA
 def select_ingredientes_lista():
@@ -258,6 +295,22 @@ def select_lojas_lista():
         lista_lojas = cursor.fetchall()
 
         return lista_lojas
+
+def select_fabricacoes_nao_vendidas_lista():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('''SELECT f.data, r.nome 
+                            FROM fabricacoes f, receitas r 
+                            WHERE f.id_receita_fabricacoes = r.id_receita AND 
+                            NOT id_fabricacao IN 
+                            (SELECT id_fabricacao_vendas 
+                                FROM vendas)
+                            ''')
+        
+        lista_nao_vendidas = cursor.fetchall()
+
+        return lista_nao_vendidas
 
 
 #UPDATE_TABLE
@@ -483,9 +536,92 @@ def select_embalagens_por_ingrediente_nomes(id_ingrediente):
         return lista_embalagens_str
 
 
+def select_dados_fabricacao(id_fabricacao):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('''SELECT f.custo_total, f.tempo_minutos, 
+                            f.rendimento, r.unidade 
+                            FROM fabricacoes f, receitas r
+                            WHERE f.id_fabricacao == :id_fabrica AND 
+                            f.id_receita_fabricacoes = r.id_receita
+                            ''',
+                            {'id_fabrica': id_fabricacao})
+        
+        dados_fabricacao = cursor.fetchone()
 
+        return dados_fabricacao
 
+def select_fabricacoes_vendidas():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('''SELECT id_fabricacao_vendas
+                            FROM vendas''')
+        
+        lista_id_fabricacoes = cursor.fetchall()
 
+        lista_ids = []
+        for item in lista_id_fabricacoes:
+            lista_ids.append(str(item[0]))
+        
+        return lista_ids
+
+def select_resultados_rececitas():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT DISTINCT id_receita, nome FROM receitas')
+        
+        lista_receitas = cursor.fetchall()
+
+        dict_receitas = {}
+        for linha in lista_receitas:
+            cod = linha[0]
+            nome = linha[1]
+
+            dict_receitas[str(cod)] = {'nome': nome, 'vezes': 0, 'pacotes': 0, 'gastos': 0, 'ganhos': 0, 'lucro': 0}
+
+        cursor.execute('''SELECT f.id_receita_fabricacoes, f.custo_total, v.quant_pacotes, v.retorno 
+                            FROM fabricacoes f, vendas v 
+                            WHERE f.id_fabricacao = v.id_fabricacao_vendas''')
+        
+        lista_fabricacoes = cursor.fetchall()
+
+        for cod, custo_total, quant_pacotes, retorno in lista_fabricacoes:
+            dict_receitas[str(cod)]['vezes'] += 1
+            dict_receitas[str(cod)]['gastos'] += custo_total
+            dict_receitas[str(cod)]['pacotes'] += quant_pacotes
+            dict_receitas[str(cod)]['ganhos'] += retorno
+            dict_receitas[str(cod)]['lucro'] = float(dict_receitas[str(cod)]['ganhos']) - float(dict_receitas[str(cod)]['gastos'])
+        
+        list_resultados = []
+        for cod in dict_receitas:
+            receita = dict_receitas[cod]
+            resultado = []
+            resultado.append(receita['nome'])
+            resultado.append(receita['vezes'])
+            resultado.append(receita['pacotes'])
+            resultado.append(receita['gastos'])
+            resultado.append(receita['ganhos'])
+            resultado.append(receita['lucro'])
+            list_resultados.append(resultado)
+        
+        return list_resultados
+
+def select_gastos_totais():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT id_comp_loja_embala, preco, quantidade FROM comp_loja_embala')
+
+        lista_gastos = cursor.fetchall()
+
+        gasto_total = 0
+        for _, preco, quant in lista_gastos:
+            gasto_total += float(preco) * float(quant)
+        
+        return gasto_total
 
 
 

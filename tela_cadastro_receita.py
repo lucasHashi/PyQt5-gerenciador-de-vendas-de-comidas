@@ -31,6 +31,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #QUANDO UM ITEM FOR DOUBLE-CLICADO
         self.list_ingredientes.itemDoubleClicked.connect(self.ingrediente_selecionado)
+
+        #CONFIGURA LARGURA COLUNAS INGREDIENTES DA RECEITA
+        header = self.tb_ingredientes.horizontalHeader() 
+        self.tb_ingredientes.setHorizontalHeaderLabels(['Codigo', 'Nome', 'Quantidade', 'Unidade'])
+        #header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
     
     def carrega_ingredientes(self):
         self.list_ingredientes.clear()
@@ -198,7 +206,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.txt_unidade_ingred.clear()
 
         self.receita = []
-        self.tb_ingredientes.clear()
+        self.tb_ingredientes.clearContents()
         
         self.desativar_receita()
 
