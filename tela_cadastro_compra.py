@@ -1,8 +1,9 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import database_receita
+import pyqt5_aux
 
-qt_tela_inicial = "tela_cadastro_compra.ui"
+qt_tela_inicial = "telas/tela_cadastro_compra.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -86,11 +87,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def carrega_produtos_compra(self):
         if(self.lista_compra):
-            self.tb_produtos.setRowCount(0)
-            for linha in range(len(self.lista_compra)):
-                self.tb_produtos.insertRow(linha)
-                for coluna in range(len(self.lista_compra[0])):
-                    self.tb_produtos.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(self.lista_compra[linha][coluna])))
+            pyqt5_aux.carregar_dados_table_widget(self.tb_produtos, self.lista_compra)
         else:
             self.tb_produtos.clear()
 

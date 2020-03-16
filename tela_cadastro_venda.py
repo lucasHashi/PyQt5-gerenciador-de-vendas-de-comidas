@@ -4,7 +4,7 @@ import database_receita
 
 #from PyQt5.QtCore import QDate
 
-qt_tela_inicial = "tela_cadastro_venda.ui"
+qt_tela_inicial = "telas/tela_cadastro_venda.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):

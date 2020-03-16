@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import database_receita
 
-qt_tela_inicial = "tela_cadastro_ingrediente.ui"
+qt_tela_inicial = "telas/tela_cadastro_ingrediente.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):

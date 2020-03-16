@@ -1,10 +1,11 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import database_receita
+import pyqt5_aux
 
 #from PyQt5.QtCore import QDate
 
-qt_tela_inicial = "tela_resumo_geral.ui"
+qt_tela_inicial = "telas/tela_resumo_geral.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -88,21 +89,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.valor_retorno += float(item[4])
         
         #CARREGAR DADOS NA TABELA
-        self.tb_resultado_receita.setRowCount(0)
-        for linha in range(len(resultados_receitas)):
-            self.tb_resultado_receita.insertRow(linha)
-            for coluna in range(len(resultados_receitas[0])):
-                self.tb_resultado_receita.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(resultados_receitas[linha][coluna])))
+        pyqt5_aux.carregar_dados_table_widget(self.tb_resultado_receita, resultados_receitas)
     
     def carrega_fabricacoes(self):
         fabricacoes_nao_vendidas = database_receita.select_fabricacoes_nao_vendidas_lista()
 
         #CARREGAR DADOS NA TABELA
-        self.tb_fabricacoes.setRowCount(0)
-        for linha in range(len(fabricacoes_nao_vendidas)):
-            self.tb_fabricacoes.insertRow(linha)
-            for coluna in range(len(fabricacoes_nao_vendidas[0])):
-                self.tb_fabricacoes.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(fabricacoes_nao_vendidas[linha][coluna])))
+        pyqt5_aux.carregar_dados_table_widget(self.tb_fabricacoes, fabricacoes_nao_vendidas)
 
     def fechar_tela(self):
         self.close()

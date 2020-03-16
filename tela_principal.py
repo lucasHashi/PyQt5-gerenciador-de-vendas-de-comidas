@@ -1,17 +1,17 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
-qt_tela_inicial = "tela_principal.ui"
+qt_tela_inicial = "telas/tela_principal.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     switch_tela_cadastro_ingrediente = QtCore.pyqtSignal()
-    switch_tela_gerenciar_ingrediente = QtCore.pyqtSignal()
+    switch_tela_gerenciar_ingredientes = QtCore.pyqtSignal()
     
     switch_tela_cadastro_receita = QtCore.pyqtSignal()
-    switch_tela_gerenciar_receita = QtCore.pyqtSignal()
+    switch_tela_gerenciar_receitas = QtCore.pyqtSignal()
     
     switch_tela_cadastro_fabricacoes = QtCore.pyqtSignal()
     switch_tela_gerenciar_fabricacoes = QtCore.pyqtSignal()
@@ -61,7 +61,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_embalagens_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('embalagens'))
         self.btn_embalagens_adicionar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
         self.btn_embalagens_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('embalagens'))
-        self.btn_embalagens_gerenciar.setStyleSheet('QPushButton {background-color: #F24405; color: #262626;}')
+        self.btn_embalagens_gerenciar.setStyleSheet('QPushButton {background-color: #F28705; color: #262626;}')
 
         self.btn_loja_embala_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('loja_embala'))
         self.btn_loja_embala_adicionar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
@@ -72,12 +72,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_compras_gerenciar.setStyleSheet('QPushButton {background-color: #F24405; color: #262626;}')
         
         self.btn_marcas_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('marcas'))
-        self.btn_marcas_gerenciar.setStyleSheet('QPushButton {background-color: #F24405; color: #262626;}')
+        self.btn_marcas_gerenciar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
         self.btn_lojas_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('lojas'))
-        self.btn_lojas_gerenciar.setStyleSheet('QPushButton {background-color: #F24405; color: #262626;}')
+        self.btn_lojas_gerenciar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
 
         self.btn_resumo_geral.pressed.connect(self.abrir_tela_resumo_geral)
-        self.btn_resumo_geral.setStyleSheet('QPushButton {background-color: #F28705; color: #262626;}')
+        self.btn_resumo_geral.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
 
     def abrir_tela_adicionar(self, nomeTela):
         if(nomeTela == 'ingredientes'):
@@ -99,7 +99,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def abrir_tela_gerenciar(self, nomeTela):
         if(nomeTela == 'ingredientes'):
-            self.switch_tela_gerenciar_ingrediente.emit()
+            self.switch_tela_gerenciar_ingredientes.emit()
         elif(nomeTela == 'receitas'):
             self.switch_tela_gerenciar_receita.emit()
         elif(nomeTela == 'fabricacoes'):

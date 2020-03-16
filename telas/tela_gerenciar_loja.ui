@@ -31,7 +31,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Listar marcas</string>
+         <string>Listar lojas</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -55,12 +55,11 @@
          <number>3</number>
         </property>
         <property name="columnCount">
-         <number>3</number>
+         <number>2</number>
         </property>
         <row/>
         <row/>
         <row/>
-        <column/>
         <column/>
         <column/>
        </widget>
@@ -135,7 +134,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Editar marcas</string>
+         <string>Editar lojas</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

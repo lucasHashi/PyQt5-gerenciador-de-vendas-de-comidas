@@ -258,6 +258,26 @@ def select_ingredientes_lista():
 
         return lista_ingredientes
 
+def select_marcas_lista():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT * FROM marcas')
+        
+        lista_marcas = cursor.fetchall()
+
+        return lista_marcas
+
+def select_lojas_lista():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT * FROM lojas')
+        
+        lista_lojas = cursor.fetchall()
+
+        return lista_lojas
+
 def select_receitas_lista():
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
@@ -314,14 +334,14 @@ def select_fabricacoes_nao_vendidas_lista():
 
 
 #UPDATE_TABLE
-def update_ingrediente(id_ingrediente, nome, unidade):
+def update_ingrediente(codigo, nome, unidade):
     nome = nome.lower()
     unidade = unidade.lower()
     
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
-        cursor.execute('UPDATE ingredientes SET nome = ?, unidade = ? WHERE id_ingrediente = ?', [nome, unidade, id_ingrediente])
+        cursor.execute('UPDATE ingredientes SET nome = ?, unidade = ? WHERE id_ingrediente = ?', [nome, unidade, codigo])
 
 def update_receita(id_receita, validade, rendimento, unidade):
     unidade = unidade.lower()
@@ -337,6 +357,20 @@ def update_loja_embala(id_loja_embala, preco):
         
         cursor.execute('UPDATE loja_embala SET preco = ? WHERE id_loja_embala = ?', [preco, id_loja_embala])
 
+def update_embalagem(id_embalagem, id_marca, tamanho):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('UPDATE embalagens SET id_marca_embalagens = ?, tamanho = ? WHERE id_embalagem = ?', [id_marca, tamanho, id_embalagem])
+
+def update_marca(codigo, nome):
+    nome = nome.lower()
+    
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('UPDATE marcas SET nome = ? WHERE id_marca = ?', [nome, codigo])
+
 def update_loja(id_loja, nome):
     nome = nome.lower()
     
@@ -347,11 +381,29 @@ def update_loja(id_loja, nome):
 
 
 #DELETE_TABLE
-def delete_ingrediente(id_ingrediente):
+def delete_ingrediente(codigo):
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
         
-        cursor.execute('DELETE FROM ingredientes WHERE id_ingrediente = ?', [id_ingrediente])
+        cursor.execute('DELETE FROM ingredientes WHERE id_ingrediente = ?', [codigo])
+
+def delete_embalagem(codigo):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('DELETE FROM embalagens WHERE id_embalagem = ?', [codigo])
+
+def delete_marca(codigo):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('DELETE FROM marcas WHERE id_marca = ?', [codigo])
+
+def delete_loja(codigo):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('DELETE FROM lojas WHERE id_loja = ?', [codigo])
 
 
 #VERIFICA_TABLE_DUPLICADA/O
@@ -366,6 +418,30 @@ def verifica_ingrediente_duplicado(nome):
         ingrediente_duplicado = cursor.fetchone()
 
         return True if(ingrediente_duplicado) else False
+
+def verifica_marca_duplicado(nome):
+    nome = nome.lower()
+    
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT * FROM marcas WHERE nome = :nome', {'nome': nome})
+        
+        marca_duplicado = cursor.fetchone()
+
+        return True if(marca_duplicado) else False
+
+def verifica_loja_duplicado(nome):
+    nome = nome.lower()
+    
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('SELECT * FROM lojas WHERE nome = :nome', {'nome': nome})
+        
+        loja_duplicado = cursor.fetchone()
+
+        return True if(loja_duplicado) else False
 
 def verifica_embalagem_duplicada(tamanho, id_ingrediente, id_marca):
     with sqlite3.connect(nome_database+'.db') as conexao:
@@ -623,6 +699,27 @@ def select_gastos_totais():
         
         return gasto_total
 
+
+def select_embalagens_nomes_por_ingrediente(codigo):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('''SELECT e.id_embalagem, m.nome, e.tamanho, i.unidade 
+                            FROM embalagens e, ingredientes i, marcas m 
+                            WHERE e.id_marca_embalagens = m.id_marca 
+                            AND e.id_ingrediente_embalagens = i.id_ingrediente 
+                            AND i.id_ingrediente = :id_ingrediente
+                            ''',
+                            {'id_ingrediente': codigo})
+        
+        lista_embalagens = cursor.fetchall()
+        lista_embalagens_str = []
+        
+        for linha in lista_embalagens:
+            embalagem = '{} - {} - {} - {}'.format(linha[0], linha[1], linha[2], linha[3])
+            lista_embalagens_str.append(embalagem)
+
+        return lista_embalagens_str
 
 
 

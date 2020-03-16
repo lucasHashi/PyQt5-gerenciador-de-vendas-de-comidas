@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtWidgets, uic
 import database_receita
 import pyqt5_aux
 
-qt_tela1 = "telas/tela_gerenciar_ingrediente.ui"
+qt_tela1 = "telas/tela_gerenciar_marca.ui"
 Ui_MainWindow_tela1, QtBaseClass_tela1 = uic.loadUiType(qt_tela1)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
@@ -25,18 +25,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
         self.carrega_tb_dados()
 
         header = self.tb_dados.horizontalHeader() 
-        self.tb_dados.setHorizontalHeaderLabels(['Codigo', 'Nome', 'Unidade'])
+        self.tb_dados.setHorizontalHeaderLabels(['Codigo', 'Nome'])
         #header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
 
     def editar(self):
         cod = self.txt_codigo.text()
         nome_ingred = self.txt_nome.text()
-        unidade = self.txt_unidade.text()
 
-        if(not database_receita.verifica_ingrediente_duplicado(nome_ingred)):
-            database_receita.update_ingrediente(cod, nome_ingred, unidade)
+        if(not database_receita.verifica_marca_duplicado(nome_ingred)):
+            database_receita.update_marca(cod, nome_ingred)
         
         self.carrega_tb_dados()
         self.cancelar_edicao()
@@ -48,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
                 linha_selec = item.row()
                 cod = self.tb_dados.item(linha_selec, 0).text()
 
-                database_receita.delete_ingrediente(cod)
+                database_receita.delete_marca(cod)
                 
                 self.carrega_tb_dados()
             except:
@@ -64,13 +62,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
             finally:
                 cod = self.tb_dados.item(linha_selec, 0).text()
                 nome = self.tb_dados.item(linha_selec, 1).text()
-                unidade = self.tb_dados.item(linha_selec, 2).text()
 
                 self.txt_codigo.setText(str(cod))
                 self.txt_nome.setText(nome)
                 self.txt_nome.setPlaceholderText(nome)
-                self.txt_unidade.setText(unidade)
-                self.txt_unidade.setPlaceholderText(unidade)
 
                 self.tb_dados.setEnabled(False)
                 self.btn_editar.setEnabled(False)
@@ -96,14 +91,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
         self.btn_cancelar.setEnabled(False)
     
     def carrega_tb_dados(self):
-        lista_dados = database_receita.select_ingredientes_lista()
+        lista_dados = database_receita.select_marcas_lista()
 
         pyqt5_aux.carregar_dados_table_widget(self.tb_dados, lista_dados)
     
     def limpar(self):
+        self.txt_codigo.clear()
         self.txt_nome.clear()
-        self.txt_unidade.clear()
-        self.txt_comida.clear()
     
     def fechar(self):
         self.close()

@@ -1,8 +1,9 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import database_receita
+import pyqt5_aux
 
-qt_tela_inicial = "tela_cadastro_receita.ui"
+qt_tela_inicial = "telas/tela_cadastro_receita.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -61,13 +62,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def carrega_ingredientes_receita(self):
         if(self.receita):
-            self.tb_ingredientes.setRowCount(0)
-            for linha in range(len(self.receita)):
-                self.tb_ingredientes.insertRow(linha)
-                for coluna in range(len(self.receita[0])):
-                    self.tb_ingredientes.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(self.receita[linha][coluna])))
+            pyqt5_aux.carregar_dados_table_widget(self.tb_ingredientes, self.receita)
         else:
-            self.tb_ingredientes.clear()
+            self.tb_ingredientes.clearContents()
 
     def adicionar_ingrediente(self):
         if(str(self.txt_ingrediente.text()) and str(self.txt_quantidade.text())):

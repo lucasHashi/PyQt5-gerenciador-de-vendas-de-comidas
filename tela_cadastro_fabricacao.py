@@ -1,10 +1,11 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import database_receita
+import pyqt5_aux
 
 #from PyQt5.QtCore import QDate
 
-qt_tela_inicial = "tela_cadastro_fabricacao.ui"
+qt_tela_inicial = "telas/tela_cadastro_fabricacao.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -53,7 +54,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #CONFIGURA LARGURA COLUNAS EMBALAGENS
         header = self.tb_embalagens.horizontalHeader() 
-        self.tb_embalagens.setHorizontalHeaderLabels(['Codigo', 'Tamanho', 'Unidade', 'Marca', 'Preço', 'Loja'])
+        self.tb_embalagens.setHorizontalHeaderLabels(['Codigo', 'Tamanho', 'Unidade', 'Marca', 'Loja', 'Preço'])
         #header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
@@ -139,11 +140,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def carrega_ingredientes_da_receita(self):
         self.tb_ingredientes.clearContents()
-        self.tb_ingredientes.setRowCount(0)
-        for linha in range(len(self.itens_na_receita)):
-            self.tb_ingredientes.insertRow(linha)
-            for coluna in range(len(self.itens_na_receita[0])):
-                self.tb_ingredientes.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(self.itens_na_receita[linha][coluna])))
+        pyqt5_aux.carregar_dados_table_widget(self.tb_ingredientes, self.itens_na_receita)
         
         self.atualiza_custo_total()
 
@@ -167,21 +164,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lista_embalagens_ingrediente = database_receita.select_loja_embala_por_ingrediente_lista(id_ingrediente)
         
         self.tb_embalagens.clearContents()
-        self.tb_embalagens.setRowCount(0)
-        for linha in range(len(lista_embalagens_ingrediente)):
-            self.tb_embalagens.insertRow(linha)
 
-            self.tb_embalagens.setItem(linha,0, QtWidgets.QTableWidgetItem(str(lista_embalagens_ingrediente[linha][0])))
-            self.tb_embalagens.setItem(linha,1, QtWidgets.QTableWidgetItem(str(lista_embalagens_ingrediente[linha][1])))
-            self.tb_embalagens.setItem(linha,2, QtWidgets.QTableWidgetItem(str(lista_embalagens_ingrediente[linha][2])))
-            self.tb_embalagens.setItem(linha,3, QtWidgets.QTableWidgetItem(str(lista_embalagens_ingrediente[linha][3])))
-            self.tb_embalagens.setItem(linha,4, QtWidgets.QTableWidgetItem(str(lista_embalagens_ingrediente[linha][5])))
-            self.tb_embalagens.setItem(linha,5, QtWidgets.QTableWidgetItem(str(lista_embalagens_ingrediente[linha][4])))
+        pyqt5_aux.carregar_dados_table_widget(self.tb_embalagens, lista_embalagens_ingrediente)
 
     def embalagem_ingrediente_selecionada(self, linha, coluna):
         #ADICIONAR A LISTA DE ITENS DA RECEITA [... TAMANHO, CUSTO, GASTO]
         tamanho = self.tb_embalagens.item(linha, 1).text()
-        preco = self.tb_embalagens.item(linha, 4).text()
+        preco = self.tb_embalagens.item(linha, 5).text()
 
         quantidade = self.txt_ingrediente.text().split(' - ')[2]
         gasto = float(preco)*float(quantidade)/float(tamanho)

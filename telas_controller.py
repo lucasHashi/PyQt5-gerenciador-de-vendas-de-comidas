@@ -9,7 +9,7 @@ import tela_cadastro_receita
 import tela_gerenciar_receita
 
 import tela_cadastro_embalagem
-#import tela_gerenciar_embalagem
+import tela_gerenciar_embalagem
 
 import tela_cadastro_loja_embala
 import tela_gerenciar_loja_embala
@@ -23,8 +23,8 @@ import tela_cadastro_fabricacao
 import tela_cadastro_venda
 #import tela_gerenciar_venda
 
-#import tela_gerenciar_marca
-#import tela_gerenciar_loja
+import tela_gerenciar_marca
+import tela_gerenciar_loja
 
 import tela_resumo_geral
 
@@ -35,6 +35,7 @@ class Controller:
 
     def abre_tela_principal(self):
         self.janela_tela_principal = tela_principal.MainWindow()
+        
         self.janela_tela_principal.switch_tela_cadastro_ingrediente.connect(self.abre_tela_cadastro_ingrediente)
         self.janela_tela_principal.switch_tela_cadastro_receita.connect(self.abre_tela_cadastro_receita)
         self.janela_tela_principal.switch_tela_cadastro_embalagens.connect(self.abre_tela_cadastro_embalagens)
@@ -43,8 +44,11 @@ class Controller:
         self.janela_tela_principal.switch_tela_cadastro_compras.connect(self.abre_tela_cadastro_compras)
         self.janela_tela_principal.switch_tela_cadastro_vendas.connect(self.abre_tela_cadastro_vendas)
 
-        self.janela_tela_principal.switch_tela_gerenciar_ingrediente.connect(self.abre_tela_gerenciar_ingrediente)
-        self.janela_tela_principal.switch_tela_gerenciar_receita.connect(self.abre_tela_gerenciar_receita)
+        self.janela_tela_principal.switch_tela_gerenciar_ingredientes.connect(self.abre_tela_gerenciar_ingrediente)
+        self.janela_tela_principal.switch_tela_gerenciar_receitas.connect(self.abre_tela_gerenciar_receita)
+        self.janela_tela_principal.switch_tela_gerenciar_embalagens.connect(self.abre_tela_gerenciar_embalagens)
+        self.janela_tela_principal.switch_tela_gerenciar_marcas.connect(self.abre_tela_gerenciar_marcas)
+        self.janela_tela_principal.switch_tela_gerenciar_lojas.connect(self.abre_tela_gerenciar_lojas)
 
         self.janela_tela_principal.switch_tela_resumo_geral.connect(self.abre_tela_resumo_geral)
 

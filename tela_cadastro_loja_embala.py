@@ -1,8 +1,9 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import database_receita
+import pyqt5_aux
 
-qt_tela_inicial = "tela_cadastro_loja_embala.ui"
+qt_tela_inicial = "telas/tela_cadastro_loja_embala.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -53,11 +54,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def carrega_loja_embala(self, id_ingrediente):
         lista_dados = database_receita.select_loja_embala_por_ingrediente_lista(id_ingrediente)
         
-        self.tb_loja_embala_cadastrados.setRowCount(0)
-        for linha in range(len(lista_dados)):
-            self.tb_loja_embala_cadastrados.insertRow(linha)
-            for coluna in range(len(lista_dados[0])):
-                self.tb_loja_embala_cadastrados.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(lista_dados[linha][coluna])))
+        pyqt5_aux.carregar_dados_table_widget(self.tb_loja_embala_cadastrados, lista_dados)
 
     def embalagem_selecionada(self, item):
         self.combo_loja.setEnabled(True)

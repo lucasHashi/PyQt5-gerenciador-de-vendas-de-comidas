@@ -1,12 +1,13 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, uic
 import database_receita
+import pyqt5_aux
 
-qt_tela1 = "tela_gerenciar_loja.ui"
+qt_tela1 = "telas/tela_gerenciar_loja.ui"
 Ui_MainWindow_tela1, QtBaseClass_tela1 = uic.loadUiType(qt_tela1)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
-
+    
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow_tela1.__init__(self)
@@ -30,10 +31,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
 
     def editar(self):
         cod = self.txt_codigo.text()
-        nome = self.txt_nome.text()
+        nome_ingred = self.txt_nome.text()
 
-        if(not database_receita.verifica_loja_duplicada(nome)):
-            database_receita.update_loja(cod, nome)
+        if(not database_receita.verifica_loja_duplicado(nome_ingred)):
+            database_receita.update_loja(cod, nome_ingred)
         
         self.carrega_tb_dados()
         self.cancelar_edicao()
@@ -91,17 +92,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow_tela1):
     
     def carrega_tb_dados(self):
         lista_dados = database_receita.select_lojas_lista()
-        
-        self.tb_dados.setRowCount(0)
-        for linha in range(len(lista_dados)):
-            self.tb_dados.insertRow(linha)
-            for coluna in range(len(lista_dados[0])):
-                self.tb_dados.setItem(linha,coluna, QtWidgets.QTableWidgetItem(str(lista_dados[linha][coluna])))
+
+        pyqt5_aux.carregar_dados_table_widget(self.tb_dados, lista_dados)
     
     def limpar(self):
+        self.txt_codigo.clear()
         self.txt_nome.clear()
-        self.txt_unidade.clear()
-        self.txt_comida.clear()
     
     def fechar(self):
         self.close()
