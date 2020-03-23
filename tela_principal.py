@@ -51,7 +51,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_fabricacoes_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('fabricacoes'))
         self.btn_fabricacoes_adicionar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
         self.btn_fabricacoes_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('fabricacoes'))
-        self.btn_fabricacoes_gerenciar.setStyleSheet('QPushButton {background-color: #F24405; color: #262626;}')
+        self.btn_fabricacoes_gerenciar.setStyleSheet('QPushButton {background-color: #F28705; color: #262626;}')
 
         self.btn_vendas_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('vendas'))
         self.btn_vendas_adicionar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
@@ -61,7 +61,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_embalagens_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('embalagens'))
         self.btn_embalagens_adicionar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
         self.btn_embalagens_gerenciar.pressed.connect(lambda: self.abrir_tela_gerenciar('embalagens'))
-        self.btn_embalagens_gerenciar.setStyleSheet('QPushButton {background-color: #F28705; color: #262626;}')
+        self.btn_embalagens_gerenciar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')
 
         self.btn_loja_embala_adicionar.pressed.connect(lambda: self.abrir_tela_adicionar('loja_embala'))
         self.btn_loja_embala_adicionar.setStyleSheet('QPushButton {background-color: #84D948; color: #262626;}')

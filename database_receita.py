@@ -643,6 +643,40 @@ def select_fabricacoes_vendidas():
         
         return lista_ids
 
+def select_fabricacoes_ids():
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        cursor.execute('''SELECT id_fabricacao
+                            FROM fabricacoes''')
+        
+        lista_id_fabricacoes = cursor.fetchall()
+
+        lista_ids = []
+        for item in lista_id_fabricacoes:
+            lista_ids.append(str(item[0]))
+        
+        return lista_ids
+
+
+def select_fabricacoes_por_lista_ids(lista_ids):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+        
+        lista_result = []
+        for id_fabri in lista_ids:
+            cursor.execute('''SELECT f.id_fabricacao, f.data, r.nome 
+                                FROM fabricacoes f, receitas r 
+                                WHERE f.id_receita_fabricacoes = r.id_receita 
+                                AND f.id_fabricacao = :id
+                                ''',
+                                {'id': str(id_fabri)})
+            
+            lista_result += cursor.fetchone()
+
+        return lista_result
+
+
 def select_resultados_rececitas():
     with sqlite3.connect(nome_database+'.db') as conexao:
         cursor = conexao.cursor()
@@ -721,6 +755,20 @@ def select_embalagens_nomes_por_ingrediente(codigo):
 
         return lista_embalagens_str
 
+def select_fabricacao_por_id(id_fabricacao):
+    with sqlite3.connect(nome_database+'.db') as conexao:
+        cursor = conexao.cursor()
+
+        cursor.execute('''SELECT f.rendimento, r.unidade, f.tempo_minutos 
+                            FROM fabricacoes f, receitas r 
+                            WHERE f.id_receita_fabricacoes = r.id_receita 
+                            AND i.id_fabricacao = :id_fabricacao
+                            ''',
+                            {'id_fabricacao': id_fabricacao})
+        
+        fabricacao = cursor.fetchone()
+
+        return fabricacao
 
 
 

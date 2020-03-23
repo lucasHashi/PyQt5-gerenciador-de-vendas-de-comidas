@@ -1,8 +1,9 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import database_receita
+from datetime import date, datetime
 
-qt_tela_inicial = "telas/tela_gerenciar_embalagem.ui"
+qt_tela_inicial = "telas/tela_gerenciar_fabricacao.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_tela_inicial)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -18,42 +19,49 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_editar.pressed.connect(self.editar)
         self.btn_excluir.pressed.connect(self.excluir_item)
 
-        self.carrega_combo_ingredientes()
+        self.combo_status.currentIndexChanged.connect(self.carrega_fabricacoes)
 
-        self.combo_ingrediente.currentIndexChanged.connect(self.combo_ingrediente_selecionado)
-
-        self.list_embalagens.itemDoubleClicked.connect(self.iniciar_edicao)
+        self.list_fabricacoes.itemDoubleClicked.connect(self.iniciar_edicao)
+        
 
     def iniciar_edicao(self, item):
         item = item.text()
-        _, marca, tamanho, unidade = item.split(' - ')
+        id_fabricacao, data, _ = item.split(' - ')
 
-        self.combo_ingrediente.setEnabled(False)
-        self.list_embalagens.setEnabled(False)
+        self.list_fabricacoes.setEnabled(False)
 
-        self.txt_marca.setText(str(marca))
+        data_fabricacao = datetime.strptime(data, '%Y/%m/%d')
+        self.date_data.setDate(data_fabricacao)
 
-        self.txt_tamanho.setPlaceholderText(str(tamanho))
-        self.txt_tamanho.setText(str(tamanho))
-        self.txt_tamanho.setEnabled(True)
+        rendimento, unidade, tempo = database_receita.select_fabricacao_por_id(id_fabricacao)
 
-        self.txt_unidade.setText(str(unidade))
+        self.txt_rendimento.setPlaceholderText(rendimento)
+        self.txt_rendimento.setText(rendimento)
+        self.txt_rendimento.setEnabled(True)
+        self.txt_unidade.setPlaceholderText(unidade)
+        self.txt_unidade.setText(unidade)
+        self.txt_unidade.setEnabled(True)
+
+        self.spin_tempo.setValue(int(tempo))
+        self.spin_tempo.setEnabled(True)
 
         self.btn_editar.setEnabled(True)
         self.btn_excluir.setEnabled(True)
         self.btn_cancelar.setEnabled(True)
     
     def cancelar_edicao(self):
-        self.combo_ingrediente.setEnabled(True)
-        self.list_embalagens.setEnabled(True)
+        self.list_fabricacoes.setEnabled(True)
 
-        self.txt_marca.setText('')
+        data_hoje = str(date.today())
+        data_hoje = QtCore.QDate.fromString(data_hoje, 'yyyy-MM-dd')
+        self.date_data.setDate(data_hoje)
 
-        self.txt_tamanho.setPlaceholderText('')
-        self.txt_tamanho.setText('')
-        self.txt_tamanho.setEnabled(False)
-
-        self.txt_unidade.setText('')
+        self.txt_rendimento.clear()
+        self.txt_rendimento.setPlaceholderText('')
+        self.txt_rendimento.setEnabled(False)
+        self.txt_unidade.clear()
+        self.spin_tempo.setValue(0)
+        self.spin_tempo.setEnabled(False)
 
         self.btn_editar.setEnabled(False)
         self.btn_excluir.setEnabled(False)
@@ -89,19 +97,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.list_embalagens.addItems(lista_embalagens)
 
-    def carrega_combo_ingredientes(self):
-        self.combo_ingrediente.clear()
+    def carrega_fabricacoes(self, indice):
+        self.list_fabricacoes.clear()
+
+        status = self.combo_status.itemText(indice).split(' - ')[0]
+        if(status == 0):
+            lista_fabricacoes = database_receita.select_fabricacoes_vendidas()
+            lista_fabricacoes = database_receita.select_fabricacoes_por_lista_ids(lista_fabricacoes)
+        elif(status == 1):
+            lista_fabricacoes = database_receita.select_fabricacoes_ids()
+            lista_fabricacoes = database_receita.select_fabricacoes_por_lista_ids(lista_fabricacoes)
+        else:
+            lista_fabricacoes_vendidas = database_receita.select_fabricacoes_vendidas()
+            lista_fabricacoes_todas = database_receita.select_fabricacoes_ids()
+            lista_fabricacoes_nao = []
+            for fabri in lista_fabricacoes_vendidas:
+                if(not fabri in lista_fabricacoes_todas):
+                    lista_fabricacoes_nao.append(fabri)
+            
+            lista_fabricacoes = database_receita.select_fabricacoes_por_lista_ids(lista_fabricacoes_nao)
         
-        nomes_ingredientes = ['Ingredientes ja cadastrados']
-        nomes_ingredientes += database_receita.select_ingredientes_nomes()
-        
-        self.combo_ingrediente.addItems(nomes_ingredientes)
+        print(lista_fabricacoes)
+        self.list_fabricacoes.addItems(lista_fabricacoes)
 
     def fechar_tela(self):
         self.close()
 
     def limpar(self):
-        self.carrega_combo_ingredientes()
         self.list_embalagens.clear()
 
         self.cancelar_edicao()

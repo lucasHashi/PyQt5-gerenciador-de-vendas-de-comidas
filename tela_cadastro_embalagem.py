@@ -50,11 +50,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             nome_marca = self.txt_marca.text()
             if(not database_receita.verifica_marca_duplicada(nome_marca)):
                 id_marca = database_receita.insere_marca(nome_marca)
+            else:
+                id_marca = database_receita.select_marca_por_nome(nome_marca)
         else:
             id_marca, nome_marca = str(self.combo_marca.currentText()).split(' - ')
 
         id_ingrediente = str(self.combo_ingrediente.currentText()).split(' - ')[0]
-        tamanho = self.txt_tamanho.text()
+        tamanho = self.txt_tamanho.text().replace(',','.')
 
         if(not database_receita.verifica_embalagem_duplicada(tamanho, id_ingrediente, id_marca)):
             database_receita.insere_embalagem(tamanho, id_ingrediente, id_marca)

@@ -18,7 +18,7 @@ import tela_cadastro_compra
 #import tela_gerenciar_compra
 
 import tela_cadastro_fabricacao
-#import tela_gerenciar_fabricacao
+import tela_gerenciar_fabricacao
 
 import tela_cadastro_venda
 #import tela_gerenciar_venda
@@ -47,6 +47,7 @@ class Controller:
         self.janela_tela_principal.switch_tela_gerenciar_ingredientes.connect(self.abre_tela_gerenciar_ingrediente)
         self.janela_tela_principal.switch_tela_gerenciar_receitas.connect(self.abre_tela_gerenciar_receita)
         self.janela_tela_principal.switch_tela_gerenciar_embalagens.connect(self.abre_tela_gerenciar_embalagens)
+        self.janela_tela_principal.switch_tela_gerenciar_fabricacoes.connect(self.abre_tela_gerenciar_fabricacoes)
         self.janela_tela_principal.switch_tela_gerenciar_marcas.connect(self.abre_tela_gerenciar_marcas)
         self.janela_tela_principal.switch_tela_gerenciar_lojas.connect(self.abre_tela_gerenciar_lojas)
 
